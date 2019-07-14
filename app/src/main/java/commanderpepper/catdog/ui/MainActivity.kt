@@ -1,7 +1,8 @@
-package commanderpepper.catdog
+package commanderpepper.catdog.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import commanderpepper.catdog.R
 
 class MainActivity : AppCompatActivity() {
 
