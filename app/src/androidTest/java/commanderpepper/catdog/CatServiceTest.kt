@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Test
 
 class CatServiceTest {
-    lateinit var catService: CatService
+    private lateinit var catService: CatService
 
     @Before
     fun init() {

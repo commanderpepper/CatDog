@@ -1,8 +1,7 @@
 package commanderpepper.catdog
 
 import commanderpepper.catdog.repo.CatDogRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -21,7 +20,7 @@ class CatDogRepositoryTest {
         var catUrl: String
         GlobalScope.launch {
             catUrl = catDogRepository.getCatUrl()
-            assertThat(catUrl, CoreMatchers.containsString("random"))
+            assertThat(catUrl, CoreMatchers.containsString("/"))
         }
     }
 
@@ -32,6 +31,26 @@ class CatDogRepositoryTest {
             dogUrl = catDogRepository.getDogUrl()
             assertThat(dogUrl, CoreMatchers.containsString("random"))
         }
+    }
+
+    @Test
+    fun getCatWithDeferred() {
+        val catUrl = runBlocking {
+            withContext(Dispatchers.Default) {
+                catDogRepository.getCatUrl()
+            }
+        }
+        assertThat(catUrl, CoreMatchers.containsString("/"))
+    }
+
+    @Test
+    fun getDogWithDeferred() {
+        val dogUrl = runBlocking {
+            withContext(Dispatchers.Default) {
+                catDogRepository.getDogUrl()
+            }
+        }
+        assertThat(dogUrl, CoreMatchers.containsString("random"))
     }
 
     @Test
