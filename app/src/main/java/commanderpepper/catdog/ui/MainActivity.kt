@@ -4,20 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.ImageView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import commanderpepper.catdog.CatDogConstants
 import commanderpepper.catdog.R
-import commanderpepper.catdog.models.Cat
-import commanderpepper.catdog.models.Dog
 import commanderpepper.catdog.repo.CatDogRepository
-import commanderpepper.catdog.retrofit.CatService
-import commanderpepper.catdog.retrofit.DogService
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var catButton: ImageView
+    private lateinit var catButton: ImageButton
     private lateinit var dogButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,27 +21,38 @@ class MainActivity : AppCompatActivity() {
 
         val catDogRepo = CatDogRepository
 
-        catButton = findViewById(R.id.testView)
-//        dogButton = findViewById(R.id.dogButton)
+        catButton = findViewById(R.id.catButton)
+        dogButton = findViewById(R.id.dogButton)
 
+        var catUrl = ""
+        var dogUrl = ""
 
         runBlocking {
             withContext(Dispatchers.Default) {
-                var url = catDogRepo.getCatUrl()
-                while (!url.contains("jpg")) {
-                    url = catDogRepo.getCatUrl()
+                catUrl = catDogRepo.getCatUrl()
+                while (!catUrl.contains("jpg")) {
                     Log.d(CatDogConstants.catTag, "Not a jpg")
-                    Log.d(CatDogConstants.catTag, url)
+                    Log.d(CatDogConstants.catTag, catUrl)
+                    catUrl = catDogRepo.getCatUrl()
                 }
-                Log.d(CatDogConstants.catTag, url)
-                withContext(Dispatchers.Main) {
-                    Picasso.get().apply {
-                        this.isLoggingEnabled = true
-                    }
-                        .load(url)
-                        .into(catButton)
+
+                dogUrl = catDogRepo.getDogUrl()
+                while (!dogUrl.contains("jpg")) {
+                    Log.d(CatDogConstants.dogTag, "Not a jpg")
+                    Log.d(CatDogConstants.dogTag, dogUrl)
+                    dogUrl = catDogRepo.getDogUrl()
                 }
+                Log.d(CatDogConstants.catTag, catUrl)
+                Log.d(CatDogConstants.dogTag, dogUrl)
             }
         }
+        Glide.with(this@MainActivity)
+            .load(catUrl)
+            .into(catButton)
+
+        Glide.with(this@MainActivity)
+            .load(dogUrl)
+            .into(dogButton)
+
     }
 }
