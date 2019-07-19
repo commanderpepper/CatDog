@@ -12,7 +12,7 @@
 
         <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="0dp" app:srcCompat="@android:color/holo_red_light"
+                android:layout_height="0dp"
                 android:id="@+id/catButton"
                 android:scaleType="centerInside"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
@@ -22,7 +22,7 @@
                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/dogButton"/>
         <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="0dp" app:srcCompat="@android:color/holo_blue_bright"
+                android:layout_height="0dp"
                 android:id="@+id/dogButton"
                 android:scaleType="centerInside"
                 android:layout_marginTop="8dp"
@@ -34,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="?attr/colorButtonNormal"
                 android:id="@+id/bothButton"
-                android:src="@drawable/ic_launcher_background"
                 android:text="@string/Both"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
