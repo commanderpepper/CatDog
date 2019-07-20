@@ -1,16 +1,19 @@
 package commanderpepper.catdog.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import commanderpepper.catdog.CatDogConstants
+import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.MainFragmentBinding
 import commanderpepper.catdog.repo.CatDogRepository
@@ -24,6 +27,7 @@ class CatDogMainFragment : Fragment() {
     lateinit var catDogMainViewModel: CatDogMainViewModel
     private lateinit var catButton: ImageButton
     private lateinit var dogButton: ImageButton
+    private lateinit var bothButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,7 @@ class CatDogMainFragment : Fragment() {
 
         catButton = binding.catButton
         dogButton = binding.dogButton
+        bothButton = binding.bothButton
 
         val catDogRepository = CatDogRepository
 
@@ -72,6 +77,33 @@ class CatDogMainFragment : Fragment() {
                 .asGif()
                 .load(catDogMainViewModel.dogUrl)
                 .into(dogButton)
+        }
+
+        val intent = Intent(context, ListActivity::class.java)
+
+        catButton.setOnClickListener {
+
+            val bundle = Bundle().apply {
+                this.putString("Option", Choice.CAT.toString())
+            }
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
+        dogButton.setOnClickListener {
+            val bundle = Bundle().apply {
+                this.putString("Option", Choice.DOG.toString())
+            }
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
+        bothButton.setOnClickListener {
+            val bundle = Bundle().apply {
+                this.putString("Option", Choice.BOTH.toString())
+            }
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
 
         return binding.root

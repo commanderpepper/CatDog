@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import commanderpepper.catdog.CatDogConstants
+import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.ActivityMainBinding
 import commanderpepper.catdog.repo.CatDogRepository
@@ -22,5 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         //Set Content View
         DataBindingUtil.setContentView(this, R.layout.activity_main) as ActivityMainBinding
+        Log.d(CatDogConstants.dogTag, Choice.DOG.toString())
     }
 }
