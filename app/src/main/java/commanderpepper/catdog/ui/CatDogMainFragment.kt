@@ -42,27 +42,8 @@ class CatDogMainFragment : Fragment() {
         dogButton = binding.dogButton
         bothButton = binding.bothButton
 
-        val catDogRepository = CatDogRepository
-
-        // If the string is empty then get some urls
-        if (catDogMainViewModel.catUrl == "") {
-            runBlocking {
-                withContext(Dispatchers.Default) {
-                    catDogMainViewModel.catUrl = catDogRepository.getCatUrl()
-
-                    while (!catDogMainViewModel.catUrl.contains("jpg|png".toRegex())) {
-                        Log.d(CatDogConstants.catTag, catDogMainViewModel.catUrl)
-                        catDogMainViewModel.catUrl = catDogRepository.getCatUrl()
-                    }
-
-                    catDogMainViewModel.dogUrl = catDogRepository.getDogUrl()
-                    while (!catDogMainViewModel.dogUrl.contains("jpg|png|gif".toRegex())) {
-                        Log.d(CatDogConstants.dogTag, catDogMainViewModel.dogUrl)
-                        catDogMainViewModel.dogUrl = catDogRepository.getDogUrl()
-                    }
-                }
-            }
-        }
+        catDogMainViewModel.catUrl = catDogMainViewModel.getUseableCatUrl()
+        catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
 
         Glide.with(this)
             .load(catDogMainViewModel.catUrl)
@@ -82,7 +63,6 @@ class CatDogMainFragment : Fragment() {
         val intent = Intent(context, ListActivity::class.java)
 
         catButton.setOnClickListener {
-
             val bundle = Bundle().apply {
                 this.putString("Option", Choice.CAT.toString())
             }
