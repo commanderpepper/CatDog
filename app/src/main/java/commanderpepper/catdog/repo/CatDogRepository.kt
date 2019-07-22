@@ -37,4 +37,12 @@ object CatDogRepository {
         }
         return dogUrl
     }
+
+    fun getListOfCatUrls(amount: Int): List<String> {
+        val catUrls = mutableListOf<String>()
+        for (i in 0 until amount) {
+            catUrls.add(getUseableCatUrlFromAPI())
+        }
+        return catUrls.toList()
+    }
 }
