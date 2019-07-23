@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,7 +52,12 @@ class CatDogListFragment : Fragment() {
 
         viewManager = LinearLayoutManager(context)
         viewAdapter = CatDogAdapter()
-        viewAdapter.submitList(listViewModel.catDogUrls.value)
+
+
+        // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
+        listViewModel.catDogUrls.observe(this, Observer {
+            viewAdapter.submitList(it)
+        })
 
         recyclerView = binding.root.catDogList.apply {
             layoutManager = viewManager
@@ -63,7 +70,6 @@ class CatDogListFragment : Fragment() {
 
                 if (!recyclerView.canScrollVertically(1)) {
                     listViewModel.addUrls(6)
-                    viewAdapter.submitList(listViewModel.catDogUrls.value)
                 }
             }
         })
