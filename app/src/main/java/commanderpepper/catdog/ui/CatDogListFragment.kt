@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdoglistFragmentBinding
 import commanderpepper.catdog.ui.recyclerview.CatDogAdapter
-import commanderpepper.catdog.ui.recyclerview.CatDogViewHolder
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
 
@@ -57,6 +56,17 @@ class CatDogListFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    listViewModel.addUrls(6)
+                    viewAdapter.submitList(listViewModel.catDogUrls.value)
+                }
+            }
+        })
 
         return binding.root
     }

@@ -25,12 +25,29 @@ class CatDogListFragmentViewModel : ViewModel() {
         }
     }
 
+    fun addUrls(amount: Int) {
+        when (option) {
+            "CAT" -> addCatUrlsToList(amount)
+            "DOG" -> addDogUrlsToList(amount)
+            "BOTH" -> addBothUrlstoList(amount)
+        }
+    }
 
     fun addCatUrlsToList(amount: Int) {
         catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
     }
 
     fun addDogUrlsToList(amount: Int) {
-        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
+        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(amount)
+    }
+
+    fun addBothUrlstoList(amount: Int) {
+        for (i in 0 until amount) {
+            if (i % 2 == 0) {
+                catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(1)
+            } else {
+                catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(1)
+            }
+        }
     }
 }
