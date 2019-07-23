@@ -6,12 +6,31 @@ import commanderpepper.catdog.repo.CatDogRepository
 
 class CatDogListFragmentViewModel : ViewModel() {
     val catDogUrls = MutableLiveData<List<String>>()
+    lateinit var option: String
 
-    init {
-        catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
+    fun getUrls() {
+        when (option) {
+            "CAT" -> catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
+            "DOG" -> catDogUrls.value = CatDogRepository.getListOfDogUrls(10)
+            "BOTH" -> {
+                catDogUrls.value = CatDogRepository.getListOfCatUrls(1)
+                for (i in 1 until 10) {
+                    if (i % 2 == 0) {
+                        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(1)
+                    } else {
+                        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(1)
+                    }
+                }
+            }
+        }
     }
 
-    fun addCatUrl(amount: Int) {
+
+    fun addCatUrlsToList(amount: Int) {
+        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
+    }
+
+    fun addDogUrlsToList(amount: Int) {
         catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
     }
 }

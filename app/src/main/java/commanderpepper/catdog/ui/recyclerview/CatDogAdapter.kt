@@ -25,6 +25,7 @@ class CatDogAdapter : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()
         getItem(position).let { url ->
             Log.d("ViewHolder", url)
             holder.bind(url)
+            holder.setFavOnClickListener()
         }
     }
 

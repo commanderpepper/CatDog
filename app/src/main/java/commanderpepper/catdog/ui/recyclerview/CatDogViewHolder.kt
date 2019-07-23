@@ -18,6 +18,10 @@ class CatDogViewHolder(private val binding: CatdogItemBinding) : RecyclerView.Vi
                 .load(url)
                 .into(binding.catdogImage)
         }
-
+    }
+    fun setFavOnClickListener(){
+        binding.favImage.setOnClickListener {
+            Log.d("Fav", "This is a test.")
+        }
     }
 }
