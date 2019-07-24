@@ -14,5 +14,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" android:name="commanderpepper.catdog.ui.CatDogMainFragment"
                 android:id="@+id/fragment" android:layout_weight="1"/>
+
     </LinearLayout>
+
 </layout>

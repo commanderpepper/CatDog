@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="Fav Cats"
+          android:id="@+id/cat_nav"
+          app:showAsAction="always"/>
+
+    <item android:title="Fav Dogs"
+          android:id="@+id/dog_nav"
+          app:showAsAction="always"/>
+
+    <item android:title="Favs"
+          android:id="@+id/both_nav"
+          app:showAsAction="ifRoom"/>
+</menu>
