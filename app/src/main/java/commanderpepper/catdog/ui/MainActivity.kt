@@ -1,6 +1,7 @@
 package commanderpepper.catdog.ui
 
 import android.app.ActionBar
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -35,10 +36,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val intent = Intent(this, ListActivity::class.java)
         when (item!!.itemId) {
-            R.id.cat_nav -> Toast.makeText(applicationContext, "Cat", Toast.LENGTH_SHORT).show()
-            R.id.dog_nav -> Toast.makeText(applicationContext, "Dog", Toast.LENGTH_SHORT).show()
-            R.id.both_nav -> Toast.makeText(applicationContext, "Both", Toast.LENGTH_SHORT).show()
+            R.id.cat_nav -> {
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.CAT.toString()) })
+                startActivity(intent)
+            }
+            R.id.dog_nav -> {
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.DOG.toString()) })
+                startActivity(intent)
+            }
+            R.id.both_nav -> {
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.BOTH.toString()) })
+                startActivity(intent)
+            }
         }
 
         return super.onOptionsItemSelected(item)
