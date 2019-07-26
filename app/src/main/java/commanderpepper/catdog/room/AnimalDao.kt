@@ -25,6 +25,10 @@ interface AnimalDao {
     fun addUrl(animalUrl: AnimalUrl): Long
 
     @Delete
-    fun deleteUrl(animalUrl: AnimalUrl)
+    fun deleteAnimal(animalUrl: AnimalUrl)
+
+    @Query("DELETE FROM animal WHERE url = :url")
+    fun deleteRowUsingUrl(url: String)
+
 }
 
