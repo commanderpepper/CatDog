@@ -2,6 +2,7 @@ package commanderpepper.catdog.repo
 
 import commanderpepper.catdog.retrofit.CatService
 import commanderpepper.catdog.retrofit.DogService
+import commanderpepper.catdog.room.AnimalDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -53,4 +54,5 @@ object CatDogRepository {
         }
         return dogUrls.toList()
     }
+
 }

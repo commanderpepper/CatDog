@@ -4,6 +4,8 @@ import androidx.room.Room
 import androidx.test.InstrumentationRegistry
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -17,27 +19,30 @@ class AnimalDatabaseTest {
 
     @Before
     fun init() {
-        val context = InstrumentationRegistry.getContext()
-        database = Room.inMemoryDatabaseBuilder(
-            context,
-            AnimalDatabase::class.java
-        ).build()
+        val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+//        database = Room.inMemoryDatabaseBuilder(
+//            context,
+//            AnimalDatabase::class.java
+//        ).build()
+        database = AnimalDatabase.getInstance(context)
     }
 
     @Test
-    fun addUrl() {
+    fun addUrl() = runBlocking {
         val url: String = "this url"
         val animal = "DOG"
 
-        val dog = AnimalUrl(url, animal)
+        launch {
+            val dog = AnimalUrl(url, animal)
+            database.animalDao().addUrl(dog)
+        }
 
-        database.animalDao().addUrl(dog)
         val rUrl = database.animalDao().getDogsUrls()
         assertThat(rUrl.first(), CoreMatchers.equalTo(url))
     }
 
     @Test
-    fun addAndGetUrls() {
+    fun addAndGetUrls() = runBlocking {
         val cat = AnimalUrl("test", "CAT")
         val ca2 = AnimalUrl("test1", "CAT")
 
@@ -49,7 +54,7 @@ class AnimalDatabaseTest {
     }
 
     @Test
-    fun addThenDeleteUrl() {
+    fun addThenDeleteUrl() = runBlocking {
         val cat = AnimalUrl("test", "CAT")
         database.animalDao().addUrl(cat)
         database.animalDao().deleteRowUsingUrl(cat.url)
@@ -58,5 +63,5 @@ class AnimalDatabaseTest {
         assertThat(size, CoreMatchers.equalTo(0))
 
     }
-    
+
 }

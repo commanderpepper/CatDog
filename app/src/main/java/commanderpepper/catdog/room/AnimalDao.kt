@@ -1,9 +1,6 @@
 package commanderpepper.catdog.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import commanderpepper.catdog.models.AnimalUrl
 
 /**
@@ -13,22 +10,22 @@ import commanderpepper.catdog.models.AnimalUrl
 @Dao
 interface AnimalDao {
     @Query("SELECT url FROM animal WHERE animalType = 'DOG'")
-    fun getDogsUrls(): List<String>
+    suspend fun getDogsUrls(): List<String>
 
     @Query("SELECT url FROM animal WHERE animalType = 'CAT'")
-    fun getCatUrls(): List<String>
+    suspend fun getCatUrls(): List<String>
 
     @Query("SELECT url FROM animal")
-    fun getUrls(): List<String>
+    suspend fun getUrls(): List<String>
 
-    @Insert
-    fun addUrl(animalUrl: AnimalUrl): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addUrl(animalUrl: AnimalUrl): Long
 
     @Delete
-    fun deleteAnimal(animalUrl: AnimalUrl)
+    suspend fun deleteAnimal(animalUrl: AnimalUrl)
 
     @Query("DELETE FROM animal WHERE url = :url")
-    fun deleteRowUsingUrl(url: String)
+    suspend fun deleteRowUsingUrl(url: String)
 
 }
 
