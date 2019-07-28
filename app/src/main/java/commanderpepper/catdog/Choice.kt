@@ -1,5 +1,5 @@
 package commanderpepper.catdog
 
 enum class Choice {
-    DOG, CAT, BOTH
+    DOG, CAT, BOTH, CATFAV, DOGFAV, BOTHFAV
 }

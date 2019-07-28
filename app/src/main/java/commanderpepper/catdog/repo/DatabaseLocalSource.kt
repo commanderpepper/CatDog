@@ -1,58 +1,87 @@
 package commanderpepper.catdog.repo
 
 import android.content.Context
+import android.database.sqlite.SQLiteException
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
-    suspend fun getList(): List<String> {
+    fun getList(): List<String> {
         var url = listOf<String>()
-        withContext(Dispatchers.IO) {
-            url = animalDatabase.animalDao().getUrls()
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                url = animalDatabase.animalDao().getUrls()
+            }
         }
         return url
     }
 
-    suspend fun getCatUrls(): List<String> {
+    fun getCatUrls(): List<String> {
         var url = listOf<String>()
-        withContext(Dispatchers.IO) {
-            url = animalDatabase.animalDao().getCatUrls()
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                url = animalDatabase.animalDao().getCatUrls()
+            }
         }
         return url
     }
 
-    suspend fun getDogUrls(): List<String> {
+    fun getDogUrls(): List<String> {
         var url = listOf<String>()
-        withContext(Dispatchers.IO) {
-            url = animalDatabase.animalDao().getDogsUrls()
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                url = animalDatabase.animalDao().getDogsUrls()
+            }
         }
         return url
     }
 
-    suspend fun addCat(url: String) {
-        withContext(Dispatchers.IO) {
-            animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
+    fun addCat(url: String) {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
+            }
         }
     }
 
-    suspend fun addDog(url: String) {
-        withContext(Dispatchers.IO) {
-            animalDatabase.animalDao().addUrl(AnimalUrl(url, "DOG"))
+    fun addDog(url: String) {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                animalDatabase.animalDao().addUrl(AnimalUrl(url, "DOG"))
+            }
         }
     }
 
-    suspend fun deleteCat(url: String) {
-        withContext(Dispatchers.IO) {
-            animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
+    fun deleteCat(url: String) {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
+            }
         }
     }
 
-    suspend fun deleteDog(url: String) {
-        withContext(Dispatchers.IO) {
-            animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
+    fun deleteDog(url: String) {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
+            }
+        }
+    }
+
+    //This can be done better I think
+    fun deleteAnimal(url: String) {
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                try {
+                    animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
+                } catch (e: SQLiteException) {
+                    animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
+                }
+            }
         }
     }
 

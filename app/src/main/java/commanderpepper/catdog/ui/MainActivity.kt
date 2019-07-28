@@ -39,15 +39,15 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ListActivity::class.java)
         when (item!!.itemId) {
             R.id.cat_nav -> {
-                intent.putExtras(Bundle().apply { this.putString("Option", Choice.CAT.toString()) })
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.CATFAV.toString()) })
                 startActivity(intent)
             }
             R.id.dog_nav -> {
-                intent.putExtras(Bundle().apply { this.putString("Option", Choice.DOG.toString()) })
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.DOGFAV.toString()) })
                 startActivity(intent)
             }
             R.id.both_nav -> {
-                intent.putExtras(Bundle().apply { this.putString("Option", Choice.BOTH.toString()) })
+                intent.putExtras(Bundle().apply { this.putString("Option", Choice.BOTHFAV.toString()) })
                 startActivity(intent)
             }
         }

@@ -20,7 +20,7 @@ abstract class AnimalDatabase : RoomDatabase() {
             synchronized(lock) {
                 if (instance == null) {
                     instance = Room.databaseBuilder(
-                        context,
+                        context.applicationContext,
                         AnimalDatabase::class.java,
                         "animal-db"
                     )

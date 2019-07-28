@@ -1,11 +1,15 @@
 package commanderpepper.catdog.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import commanderpepper.catdog.repo.CatDogRepository
+import commanderpepper.catdog.repo.DatabaseLocalSource
 
-class CatDogListFragmentViewModel : ViewModel() {
+class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
+    var localDataSource : DatabaseLocalSource = DatabaseLocalSource.getInstance(getApplication())!!
     lateinit var option: String
 
     fun getUrls() {
@@ -22,6 +26,9 @@ class CatDogListFragmentViewModel : ViewModel() {
                     }
                 }
             }
+            "CATFAV" -> catDogUrls.value = localDataSource.getCatUrls()
+            "DOGFAV" -> catDogUrls.value = localDataSource.getDogUrls()
+            "BOTHFAV" -> catDogUrls.value = localDataSource.getCatUrls()
         }
     }
 

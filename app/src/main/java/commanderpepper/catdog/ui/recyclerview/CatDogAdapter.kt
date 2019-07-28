@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import commanderpepper.catdog.R
 
-class CatDogAdapter : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
+class CatDogAdapter(val option: String) : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatDogViewHolder {
         return CatDogViewHolder(
@@ -17,7 +17,8 @@ class CatDogAdapter : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()
                 R.layout.catdog_item,
                 parent,
                 false
-            )
+            ),
+            option
         )
     }
 
@@ -25,7 +26,7 @@ class CatDogAdapter : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()
         getItem(position).let { url ->
             Log.d("ViewHolder", url)
             holder.bind(url)
-            holder.setFavOnClickListener()
+            holder.setFavOnClickListener(url)
         }
     }
 

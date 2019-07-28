@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -51,28 +50,50 @@ class CatDogListFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.catdoglist_fragment, container, false)
 
         viewManager = LinearLayoutManager(context)
-        viewAdapter = CatDogAdapter()
-
+        viewAdapter = CatDogAdapter(option)
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
         listViewModel.catDogUrls.observe(this, Observer {
             viewAdapter.submitList(it)
         })
 
-        recyclerView = binding.root.catDogList.apply {
-            layoutManager = viewManager
-            adapter = viewAdapter
+
+        Log.d("Mist", listViewModel.catDogUrls.value.toString())
+
+        if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
+            binding.listScrollView.visibility = View.GONE
+            binding.favsText.visibility = View.VISIBLE
+        } else {
+            recyclerView = binding.root.catDogList.apply {
+                layoutManager = viewManager
+                adapter = viewAdapter
+            }
+
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    if (!recyclerView.canScrollVertically(1)) {
+                        listViewModel.addUrls(6)
+                    }
+                }
+            })
         }
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                if (!recyclerView.canScrollVertically(1)) {
-                    listViewModel.addUrls(6)
-                }
-            }
-        })
+//        recyclerView = binding.root.catDogList.apply {
+//            layoutManager = viewManager
+//            adapter = viewAdapter
+//        }
+//
+//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//
+//                if (!recyclerView.canScrollVertically(1)) {
+//                    listViewModel.addUrls(6)
+//                }
+//            }
+//        })
 
         return binding.root
     }

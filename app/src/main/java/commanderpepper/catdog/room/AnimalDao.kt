@@ -27,5 +27,8 @@ interface AnimalDao {
     @Query("DELETE FROM animal WHERE url = :url")
     suspend fun deleteRowUsingUrl(url: String)
 
+    @Query("DELETE FROM animal")
+    fun clearTableForTesting()
+
 }
 

@@ -3,6 +3,7 @@ package commanderpepper.catdog
 import commanderpepper.catdog.repo.DatabaseLocalSource
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -50,5 +51,10 @@ class AnimalLocalDataSourceTest {
         localDataSource.deleteDog(url)
         val dogs = localDataSource.getDogUrls()
         Assert.assertTrue(!dogs.contains(url))
+    }
+
+    @After
+    fun cleanUp(){
+        localDataSource.animalDatabase.animalDao().clearTableForTesting()
     }
 }
