@@ -1,11 +1,7 @@
 package commanderpepper.catdog.ui.recyclerview
 
-import android.graphics.drawable.Drawable
-import android.util.Log
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdogItemBinding
 import commanderpepper.catdog.repo.DatabaseLocalSource
 
@@ -29,23 +25,23 @@ class CatDogViewHolder(private val binding: CatdogItemBinding, val option: Strin
     }
 
     fun setFavOnClickListener(url: String) {
-        val s = DatabaseLocalSource.getInstance(this.itemView.context)
+        val localSource = DatabaseLocalSource.getInstance(this.itemView.context)
         binding.favImage.setOnClickListener {
             if (binding.favImage.tag == "OFF") {
                 when (option) {
-                    "CAT" -> s!!.addCat(url)
-                    "DOG" -> s!!.addDog(url)
-                    "CATFAV" -> s!!.addCat(url)
-                    "DOGFAV" -> s!!.addDog(url)
+                    "CAT" -> localSource!!.addCat(url)
+                    "DOG" -> localSource!!.addDog(url)
+                    "CATFAV" -> localSource!!.addCat(url)
+                    "DOGFAV" -> localSource!!.addDog(url)
                 }
                 binding.favImage.setImageDrawable(itemView.resources.getDrawable(android.R.drawable.btn_star_big_on))
                 binding.favImage.tag = "ON"
             } else {
                 when (option) {
-                    "CAT" -> s!!.deleteCat(url)
-                    "DOG" -> s!!.deleteDog(url)
-                    "CATFAV" -> s!!.deleteCat(url)
-                    "DOGFAV" -> s!!.deleteDog(url)
+                    "CAT" -> localSource!!.deleteCat(url)
+                    "DOG" -> localSource!!.deleteDog(url)
+                    "CATFAV" -> localSource!!.deleteCat(url)
+                    "DOGFAV" -> localSource!!.deleteDog(url)
                 }
                 binding.favImage.setImageDrawable(itemView.resources.getDrawable(android.R.drawable.btn_star_big_off))
                 binding.favImage.tag = "OFF"
