@@ -2,6 +2,7 @@ package commanderpepper.catdog.repo
 
 import android.content.Context
 import android.database.sqlite.SQLiteException
+import android.util.Log
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +13,7 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
     fun getList(): List<String> {
         var url = listOf<String>()
+        val orderedList = listOf<String>()
         runBlocking {
             withContext(Dispatchers.IO) {
                 url = animalDatabase.animalDao().getUrls()
@@ -43,7 +45,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
     fun addCat(url: String) {
         runBlocking {
             withContext(Dispatchers.IO) {
+                Log.d("SAVECAT", url)
                 animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
+                Log.d("SAVECAT", "done")
             }
         }
     }

@@ -46,10 +46,6 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtras(Bundle().apply { this.putString("Option", Choice.DOGFAV.toString()) })
                 startActivity(intent)
             }
-            R.id.both_nav -> {
-                intent.putExtras(Bundle().apply { this.putString("Option", Choice.BOTHFAV.toString()) })
-                startActivity(intent)
-            }
         }
 
         return super.onOptionsItemSelected(item)

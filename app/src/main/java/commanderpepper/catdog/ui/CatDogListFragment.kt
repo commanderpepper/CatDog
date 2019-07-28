@@ -50,7 +50,7 @@ class CatDogListFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.catdoglist_fragment, container, false)
 
         viewManager = LinearLayoutManager(context)
-        viewAdapter = CatDogAdapter(option)
+        viewAdapter = CatDogAdapter(option, listViewModel)
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
         listViewModel.catDogUrls.observe(this, Observer {
@@ -61,6 +61,7 @@ class CatDogListFragment : Fragment() {
         Log.d("Mist", listViewModel.catDogUrls.value.toString())
 
         if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
+            listViewModel.getUrls()
             binding.listScrollView.visibility = View.GONE
             binding.favsText.visibility = View.VISIBLE
         } else {

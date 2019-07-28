@@ -1,15 +1,15 @@
 package commanderpepper.catdog.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.repo.DatabaseLocalSource
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
-    var localDataSource : DatabaseLocalSource = DatabaseLocalSource.getInstance(getApplication())!!
+    var localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
     lateinit var option: String
 
     fun getUrls() {
@@ -28,7 +28,7 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
             }
             "CATFAV" -> catDogUrls.value = localDataSource.getCatUrls()
             "DOGFAV" -> catDogUrls.value = localDataSource.getDogUrls()
-            "BOTHFAV" -> catDogUrls.value = localDataSource.getCatUrls()
+            "BOTHFAV" -> catDogUrls.value = localDataSource.getList()
         }
     }
 
@@ -57,4 +57,58 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
             }
         }
     }
+
+    fun saveFavoriteUrl(url: String, position: Int) {
+        Log.d("SAVE", "Saving URL")
+        Log.d("SAVE", option)
+        when (option) {
+            "CAT" -> saveCatUrlToDatabase(url)
+            "DOG" -> saveDogUrlToDatabase(url)
+            "BOTH" -> saveUrlToDatabaseUsingPosition(url, position)
+        }
+    }
+
+    fun deleteFavoriteUrl(url: String, position: Int) {
+        when (option) {
+            "CATFAV" -> deleteCatUrlFromDatabase(url)
+            "DOGFAV" -> deleteDogUrlFromDatabase(url)
+            "BOTHFAV" -> deleteUrlFromDatabaseUsingUrl(url, position)
+        }
+    }
+
+    fun saveCatUrlToDatabase(url: String) {
+        Log.d("SAVECAT", "Saving CAT URL")
+        localDataSource.addCat(url)
+    }
+
+    fun saveDogUrlToDatabase(url: String) {
+        localDataSource.addDog(url)
+    }
+
+    fun saveUrlToDatabaseUsingPosition(url: String, position: Int) {
+        if (position % 2 == 0) {
+            saveCatUrlToDatabase(url)
+        } else {
+            saveDogUrlToDatabase(url)
+        }
+    }
+
+    fun deleteCatUrlFromDatabase(url: String) {
+        localDataSource.deleteCat(url)
+        getUrls()
+    }
+
+    fun deleteDogUrlFromDatabase(url: String) {
+        localDataSource.deleteDog(url)
+        getUrls()
+    }
+
+    fun deleteUrlFromDatabaseUsingUrl(url: String, position: Int) {
+        if (position % 2 == 0) {
+            deleteCatUrlFromDatabase(url)
+        } else {
+            deleteDogUrlFromDatabase(url)
+        }
+    }
+
 }

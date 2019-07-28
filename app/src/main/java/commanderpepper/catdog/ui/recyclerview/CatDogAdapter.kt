@@ -7,8 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import commanderpepper.catdog.R
+import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 
-class CatDogAdapter(val option: String) : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
+class CatDogAdapter(val option: String, val viewModel: CatDogListFragmentViewModel) : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatDogViewHolder {
         return CatDogViewHolder(
@@ -18,7 +19,8 @@ class CatDogAdapter(val option: String) : ListAdapter<String, CatDogViewHolder>(
                 parent,
                 false
             ),
-            option
+            option,
+            viewModel
         )
     }
 
@@ -26,8 +28,13 @@ class CatDogAdapter(val option: String) : ListAdapter<String, CatDogViewHolder>(
         getItem(position).let { url ->
             Log.d("ViewHolder", url)
             holder.bind(url)
-            holder.setFavOnClickListener(url)
+            holder.setFavOnClickListener(url, position)
         }
+    }
+
+    override fun onViewAttachedToWindow(holder: CatDogViewHolder) {
+        holder.setImageAndTag()
+        super.onViewAttachedToWindow(holder)
     }
 
     private class StringDiffCallback : DiffUtil.ItemCallback<String>() {

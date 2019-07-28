@@ -8,8 +8,4 @@
     <item android:title="Fav Dogs"
           android:id="@+id/dog_nav"
           app:showAsAction="always"/>
-
-    <item android:title="Favs"
-          android:id="@+id/both_nav"
-          app:showAsAction="ifRoom"/>
 </menu>
