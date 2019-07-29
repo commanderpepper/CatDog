@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import commanderpepper.catdog.models.AnimalUrl
 
-@Database(entities = arrayOf(AnimalUrl::class), version = 1)
+@Database(entities = [AnimalUrl::class], version = 1)
 abstract class AnimalDatabase : RoomDatabase() {
     abstract fun animalDao(): AnimalDao
 

@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.ListAdapter
 import commanderpepper.catdog.R
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 
-class CatDogAdapter(val option: String, val viewModel: CatDogListFragmentViewModel) : ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
+class CatDogAdapter(val option: String, val viewModel: CatDogListFragmentViewModel) :
+    ListAdapter<String, CatDogViewHolder>(StringDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatDogViewHolder {
         return CatDogViewHolder(
@@ -32,6 +33,9 @@ class CatDogAdapter(val option: String, val viewModel: CatDogListFragmentViewMod
         }
     }
 
+    /**
+     * Used to make sure that when a ViewHolder is reintroduced, the fav star is properly set
+     */
     override fun onViewAttachedToWindow(holder: CatDogViewHolder) {
         holder.setImageAndTag()
         super.onViewAttachedToWindow(holder)

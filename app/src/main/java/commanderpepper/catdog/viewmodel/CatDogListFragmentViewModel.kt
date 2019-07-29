@@ -12,6 +12,9 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
     var localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
     lateinit var option: String
 
+    /**
+     * Sets the catDogUrls list according to the option from the user
+     */
     fun getUrls() {
         when (option) {
             "CAT" -> catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
@@ -32,6 +35,9 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
+    /**
+     * Adds urls, used with endless scrolling
+     */
     fun addUrls(amount: Int) {
         when (option) {
             "CAT" -> addCatUrlsToList(amount)
@@ -40,15 +46,15 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
-    fun addCatUrlsToList(amount: Int) {
+    private fun addCatUrlsToList(amount: Int) {
         catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
     }
 
-    fun addDogUrlsToList(amount: Int) {
+    private fun addDogUrlsToList(amount: Int) {
         catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(amount)
     }
 
-    fun addBothUrlstoList(amount: Int) {
+    private fun addBothUrlstoList(amount: Int) {
         for (i in 0 until amount) {
             if (i % 2 == 0) {
                 catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(1)
@@ -58,6 +64,9 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
+    /**
+     * Adds urls to the database
+     */
     fun saveFavoriteUrl(url: String, position: Int) {
         Log.d("SAVE", "Saving URL")
         Log.d("SAVE", option)
@@ -68,6 +77,9 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
+    /**
+     * Deletes urls from database
+     */
     fun deleteFavoriteUrl(url: String, position: Int) {
         when (option) {
             "CATFAV" -> deleteCatUrlFromDatabase(url)
@@ -76,16 +88,16 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
-    fun saveCatUrlToDatabase(url: String) {
+    private fun saveCatUrlToDatabase(url: String) {
         Log.d("SAVECAT", "Saving CAT URL")
         localDataSource.addCat(url)
     }
 
-    fun saveDogUrlToDatabase(url: String) {
+    private fun saveDogUrlToDatabase(url: String) {
         localDataSource.addDog(url)
     }
 
-    fun saveUrlToDatabaseUsingPosition(url: String, position: Int) {
+    private fun saveUrlToDatabaseUsingPosition(url: String, position: Int) {
         if (position % 2 == 0) {
             saveCatUrlToDatabase(url)
         } else {
@@ -93,17 +105,17 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         }
     }
 
-    fun deleteCatUrlFromDatabase(url: String) {
+    private fun deleteCatUrlFromDatabase(url: String) {
         localDataSource.deleteCat(url)
         getUrls()
     }
 
-    fun deleteDogUrlFromDatabase(url: String) {
+    private fun deleteDogUrlFromDatabase(url: String) {
         localDataSource.deleteDog(url)
         getUrls()
     }
 
-    fun deleteUrlFromDatabaseUsingUrl(url: String, position: Int) {
+    private fun deleteUrlFromDatabaseUsingUrl(url: String, position: Int) {
         if (position % 2 == 0) {
             deleteCatUrlFromDatabase(url)
         } else {

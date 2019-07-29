@@ -30,11 +30,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Creates options inside the action bar
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_items, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    /**
+     * Goes to the favorite section when clicked
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val intent = Intent(this, ListActivity::class.java)
         when (item!!.itemId) {

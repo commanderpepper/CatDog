@@ -29,12 +29,18 @@ class CatDogMainFragment : Fragment() {
     private lateinit var dogButton: ImageButton
     private lateinit var bothButton: Button
 
+    /**
+     * Instantiates a view model to persist the starting dog and cat images
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         catDogMainViewModel = ViewModelProviders.of(this).get(CatDogMainViewModel::class.java)
 
     }
 
+    /**
+     * Creates reference to buttons and sets urls for the dog and cat button images
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: MainFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
 

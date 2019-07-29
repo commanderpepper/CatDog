@@ -27,12 +27,18 @@ class CatDogListFragment : Fragment() {
     private lateinit var viewAdapter: CatDogAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
+    /**
+     * Takes in the option from the user.
+     */
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         option = activity?.intent?.extras?.getString("Option") ?: "Where's the data?"
         Log.d("ListFragment", option)
     }
 
+    /**
+     * Creates a View Model which will help with persisting data and abstracting calls to Retrofit and Room
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
@@ -45,6 +51,9 @@ class CatDogListFragment : Fragment() {
         Log.d("ViewModel", listViewModel.catDogUrls.value.toString())
     }
 
+    /**
+     * Creates a view model and an adapter.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: CatdoglistFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.catdoglist_fragment, container, false)
@@ -57,9 +66,11 @@ class CatDogListFragment : Fragment() {
             viewAdapter.submitList(it)
         })
 
-
         Log.d("Mist", listViewModel.catDogUrls.value.toString())
 
+        /**
+         * Checks to see if the list from favs is empty. If so, then display the imageView instead.
+         */
         if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
             listViewModel.getUrls()
             binding.listScrollView.visibility = View.GONE
@@ -70,6 +81,10 @@ class CatDogListFragment : Fragment() {
                 adapter = viewAdapter
             }
 
+            /**
+             * Adds a listener that activates when the user is at the end of the RecyclerView
+             * Allows for endless scrolling when choosing random animals
+             */
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -80,21 +95,6 @@ class CatDogListFragment : Fragment() {
                 }
             })
         }
-
-//        recyclerView = binding.root.catDogList.apply {
-//            layoutManager = viewManager
-//            adapter = viewAdapter
-//        }
-//
-//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//
-//                if (!recyclerView.canScrollVertically(1)) {
-//                    listViewModel.addUrls(6)
-//                }
-//            }
-//        })
 
         return binding.root
     }

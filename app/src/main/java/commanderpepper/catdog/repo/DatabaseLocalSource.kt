@@ -11,9 +11,11 @@ import kotlinx.coroutines.withContext
 
 class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
+    /**
+     * Get list of  favorite dogs and cats
+     */
     fun getList(): List<String> {
         var url = listOf<String>()
-        val orderedList = listOf<String>()
         runBlocking {
             withContext(Dispatchers.IO) {
                 url = animalDatabase.animalDao().getUrls()
@@ -22,6 +24,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         return url
     }
 
+    /**
+     * Get list of favorite cats
+     */
     fun getCatUrls(): List<String> {
         var url = listOf<String>()
         runBlocking {
@@ -32,6 +37,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         return url
     }
 
+    /**
+     * Get list of favorite dogs
+     */
     fun getDogUrls(): List<String> {
         var url = listOf<String>()
         runBlocking {
@@ -42,6 +50,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         return url
     }
 
+    /**
+     * Add a cat to the database
+     */
     fun addCat(url: String) {
         runBlocking {
             withContext(Dispatchers.IO) {
@@ -52,6 +63,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
+    /**
+     * Add a dog to the database
+     */
     fun addDog(url: String) {
         runBlocking {
             withContext(Dispatchers.IO) {
@@ -60,6 +74,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
+    /**
+     * Delete a cat from the database
+     */
     fun deleteCat(url: String) {
         runBlocking {
             withContext(Dispatchers.IO) {
@@ -68,6 +85,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
+    /**
+     * Delete a dog from the database
+     */
     fun deleteDog(url: String) {
         runBlocking {
             withContext(Dispatchers.IO) {
@@ -89,6 +109,9 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
+    /**
+     * Singleton object to access the database
+     */
     companion object {
         private var instance: DatabaseLocalSource? = null
 

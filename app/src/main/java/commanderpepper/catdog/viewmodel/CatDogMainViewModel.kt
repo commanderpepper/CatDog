@@ -3,6 +3,9 @@ package commanderpepper.catdog.viewmodel
 import androidx.lifecycle.ViewModel
 import commanderpepper.catdog.repo.CatDogRepository
 
+/**
+ * Used with the main activity
+ */
 class CatDogMainViewModel : ViewModel() {
     var dogUrl: String = ""
     var catUrl: String = ""

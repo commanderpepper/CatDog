@@ -13,6 +13,10 @@ class CatDogViewHolder(
     val viewModel: CatDogListFragmentViewModel
 ) :
     RecyclerView.ViewHolder(binding.root) {
+
+    /**
+     * Used to bind the url properly. Some urls direct to gifs and those need to be properly dealt with.
+     */
     fun bind(url: String) {
         if (url.contains("gif".toRegex())) {
             Glide.with(binding.root)
@@ -27,6 +31,9 @@ class CatDogViewHolder(
         setImageAndTag()
     }
 
+    /**
+     * If the option the user has chosen a FAV, then set all the fav stars to be on. Otherwise set them to be off.
+     */
     fun setImageAndTag() {
         if (option.contains("FAV")) {
             binding.favImage.setImageDrawable(itemView.resources.getDrawable(R.drawable.btn_star_big_on))
@@ -37,8 +44,10 @@ class CatDogViewHolder(
         }
     }
 
+    /**
+     * Contains logic to deal with user saving and unsaving urls. Calls the ViewModel.
+     */
     fun setFavOnClickListener(url: String, position: Int) {
-//        val localSource = DatabaseLocalSource.getInstance(this.itemView.context)
         binding.favImage.setOnClickListener {
             if (binding.favImage.tag == "OFF") {
                 viewModel.saveFavoriteUrl(url, position)
@@ -49,15 +58,6 @@ class CatDogViewHolder(
                 viewModel.deleteFavoriteUrl(url, position)
                 binding.favImage.setImageDrawable(itemView.resources.getDrawable(android.R.drawable.btn_star_big_off))
                 binding.favImage.tag = "OFF"
-
-//                when (option) {
-//                    "CAT" -> localSource!!.deleteCat(url)
-//                    "DOG" -> localSource!!.deleteDog(url)
-//                    "CATFAV" -> localSource!!.deleteCat(url)
-//                    "DOGFAV" -> localSource!!.deleteDog(url)
-//                }
-//                binding.favImage.setImageDrawable(itemView.resources.getDrawable(android.R.drawable.btn_star_big_off))
-//                binding.favImage.tag = "OFF"
             }
         }
     }
