@@ -43,6 +43,7 @@ class CatDogListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
         listViewModel.option = option
+        Log.d("CATDOGURLS", listViewModel.catDogUrls.value.toString())
         listViewModel.getUrls()
 
         Log.d("ViewModel", listViewModel.toString())

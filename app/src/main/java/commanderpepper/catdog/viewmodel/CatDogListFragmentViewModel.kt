@@ -17,9 +17,9 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
      */
     fun getUrls() {
         when (option) {
-            "CAT" -> catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
-            "DOG" -> catDogUrls.value = CatDogRepository.getListOfDogUrls(10)
-            "BOTH" -> {
+            "CAT" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
+            "DOG" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getListOfDogUrls(10)
+            "BOTH" -> if (catDogUrls.value == null) {
                 catDogUrls.value = CatDogRepository.getListOfCatUrls(1)
                 for (i in 1 until 10) {
                     if (i % 2 == 0) {
@@ -33,6 +33,7 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
             "DOGFAV" -> catDogUrls.value = localDataSource.getDogUrls()
             "BOTHFAV" -> catDogUrls.value = localDataSource.getList()
         }
+        Log.d("CATDOGURLS", catDogUrls.value.toString())
     }
 
     /**
