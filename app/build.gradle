@@ -55,6 +55,7 @@ dependencies {
 
     //ViewModel
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha02'
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"

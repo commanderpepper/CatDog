@@ -64,6 +64,7 @@ class CatDogListFragment : Fragment() {
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
         listViewModel.catDogUrls.observe(this, Observer {
+            Log.d("LISTA", it.toString())
             viewAdapter.submitList(it)
         })
 
