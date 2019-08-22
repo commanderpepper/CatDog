@@ -69,35 +69,31 @@ object CatDogRepository {
 
     suspend fun getCat(): String {
         var catUrl = ""
-        withContext(Dispatchers.IO) {
-            while (!catUrl.contains("jpg|png".toRegex())) {
-                catUrl = getCatUrl()
-            }
+        while (!catUrl.contains("jpg|png".toRegex())) {
+            catUrl = getCatUrl()
         }
         return catUrl
     }
 
     suspend fun getDog(): String {
         var dogUrl = ""
-        withContext(Dispatchers.IO) {
-            while (!dogUrl.contains("gif|jpg|png".toRegex())) {
-                dogUrl = getDogUrl()
-            }
+        while (!dogUrl.contains("gif|jpg|png".toRegex())) {
+            dogUrl = getDogUrl()
         }
         return dogUrl
     }
 
     suspend fun getCatList(amount: Int): List<String> {
         val catUrls = mutableListOf<String>()
-        for (i in 0 until amount){
+        for (i in 0 until amount) {
             catUrls.add(getCat())
         }
         return catUrls
     }
 
-    suspend fun getDogList(amount: Int): List<String>{
+    suspend fun getDogList(amount: Int): List<String> {
         val dogUrls = mutableListOf<String>()
-        for(i in 0 until amount){
+        for (i in 0 until amount) {
             dogUrls.add(getDog())
         }
         return dogUrls

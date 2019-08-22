@@ -18,7 +18,7 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
      */
     fun getUrls() {
         when (option) {
-            "CAT" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getListOfCatUrls(10)
+            "CAT" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getCatList(10)
             "DOG" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getListOfDogUrls(10)
             "BOTH" -> if (catDogUrls.value == null) {
                 catDogUrls.value = CatDogRepository.getListOfCatUrls(1)

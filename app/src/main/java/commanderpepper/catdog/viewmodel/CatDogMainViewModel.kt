@@ -3,10 +3,7 @@ package commanderpepper.catdog.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import commanderpepper.catdog.repo.CatDogRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * Used with the main activity
@@ -19,10 +16,15 @@ class CatDogMainViewModel : ViewModel() {
         if (catUrl != "") {
             return catUrl
         }
-//        viewModelScope.launch {
-//            catUrl = CatDogRepository.getCat()
-//        }
-        catUrl = CatDogRepository.getUseableCatUrlFromAPI()
+
+        val catDeffered = viewModelScope.async(Dispatchers.IO) {
+            CatDogRepository.getCat()
+        }
+
+        runBlocking {
+            catUrl = catDeffered.await()
+        }
+
         return catUrl
     }
 
@@ -31,22 +33,14 @@ class CatDogMainViewModel : ViewModel() {
             return dogUrl
         }
 
-        viewModelScope.launch {
-            val z = async(Dispatchers.IO) {
-                CatDogRepository.getDog()
-            }
-
-            withContext(Dispatchers.Main) {
-                dogUrl = z.await()
-            }
+        val dogDeffered = viewModelScope.async(Dispatchers.IO) {
+            CatDogRepository.getDog()
         }
 
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                dogUrl = CatDogRepository.getDog()
-//            }
-//        }
-//        dogUrl = CatDogRepository.getUseableDogUrlFromAPI()
+        runBlocking {
+            dogUrl = dogDeffered.await()
+        }
+
         return dogUrl
     }
 }
