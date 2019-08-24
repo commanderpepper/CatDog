@@ -45,16 +45,7 @@ object CatDogRepository {
         return dogUrl
     }
 
-    /**
-     * Get a list of car urls
-     */
-    fun getListOfCatUrls(amount: Int): List<String> {
-        val catUrls = mutableListOf<String>()
-        for (i in 0 until amount) {
-            catUrls.add(getUseableCatUrlFromAPI())
-        }
-        return catUrls.toList()
-    }
+
 
     /**
      * Get a list of dog urls

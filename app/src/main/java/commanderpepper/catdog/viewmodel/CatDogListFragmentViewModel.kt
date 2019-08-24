@@ -4,35 +4,67 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.repo.DatabaseLocalSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
-    var localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
+    var localDataSource: DatabaseLocalSource =
+        DatabaseLocalSource.getInstance(application.applicationContext)!!
     lateinit var option: String
+    val context = viewModelScope.coroutineContext + Dispatchers.IO
 
     /**
      * Sets the catDogUrls list according to the option from the user
      */
     fun getUrls() {
-        when (option) {
-            "CAT" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getCatList(10)
-            "DOG" -> if (catDogUrls.value == null) catDogUrls.value = CatDogRepository.getListOfDogUrls(10)
-            "BOTH" -> if (catDogUrls.value == null) {
-                catDogUrls.value = CatDogRepository.getListOfCatUrls(1)
-                for (i in 1 until 10) {
-                    if (i % 2 == 0) {
-                        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(1)
-                    } else {
-                        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(1)
+        runBlocking {
+            when (option) {
+                "CAT" -> if (catDogUrls.value == null)
+                    catDogUrls.value =
+                        withContext(context) {
+                            CatDogRepository.getCatList(10)
+                        }
+                "DOG" -> if (catDogUrls.value == null) catDogUrls.value =
+                    withContext(context) {
+                        CatDogRepository.getDogList(10)
+                    }
+                "BOTH" -> if (catDogUrls.value == null) {
+                    catDogUrls.value =
+                        withContext(context) {
+                            CatDogRepository.getCatList(1)
+                        }
+                    for (i in 1 until 10) {
+                        if (i % 2 == 0) {
+                            catDogUrls.value =
+                                catDogUrls.value!! + withContext(context) {
+                                    CatDogRepository.getCatList(1)
+                                }
+                        } else {
+                            catDogUrls.value =
+                                catDogUrls.value!! + withContext(context) {
+                                    CatDogRepository.getDogList(1)
+                                }
+                        }
                     }
                 }
+                "CATFAV" -> catDogUrls.value =
+                    withContext(context) {
+                        localDataSource.getCatListFromDatabase()
+                    }
+                "DOGFAV" -> catDogUrls.value =
+                    withContext(context) {
+                        localDataSource.getDogListFromDatabase()
+                    }
+                "BOTHFAV" -> catDogUrls.value =
+                    withContext(context) {
+                        localDataSource.getListFromDatabase()
+                    }
             }
-            "CATFAV" -> catDogUrls.value = localDataSource.getCatUrls()
-            "DOGFAV" -> catDogUrls.value = localDataSource.getDogUrls()
-            "BOTHFAV" -> catDogUrls.value = localDataSource.getList()
         }
         Log.d("CATDOGURLS", catDogUrls.value.toString())
     }
@@ -49,21 +81,40 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
     }
 
     private fun addCatUrlsToList(amount: Int) {
-        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(amount)
+        runBlocking {
+            catDogUrls.value =
+                catDogUrls.value!! + withContext(context) {
+                    CatDogRepository.getCatList(amount)
+                }
+        }
     }
 
     private fun addDogUrlsToList(amount: Int) {
-        catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(amount)
+        runBlocking {
+            catDogUrls.value =
+                catDogUrls.value!! + withContext(context) {
+                    CatDogRepository.getDogList(amount)
+                }
+        }
     }
 
     private fun addBothUrlstoList(amount: Int) {
-        for (i in 0 until amount) {
-            if (i % 2 == 0) {
-                catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfCatUrls(1)
-            } else {
-                catDogUrls.value = catDogUrls.value!! + CatDogRepository.getListOfDogUrls(1)
+        runBlocking {
+            for (i in 0 until amount) {
+                if (i % 2 == 0) {
+                    catDogUrls.value =
+                        catDogUrls.value!! + withContext(context) {
+                            CatDogRepository.getCatList(1)
+                        }
+                } else {
+                    catDogUrls.value =
+                        catDogUrls.value!! + withContext(context) {
+                            CatDogRepository.getDogList(1)
+                        }
+                }
             }
         }
+
     }
 
     /**

@@ -109,6 +109,28 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
+    suspend fun getListFromDatabase(): List<String> = animalDatabase.animalDao().getUrls()
+
+    suspend fun getCatListFromDatabase(): List<String> = animalDatabase.animalDao().getCatUrls()
+
+    suspend fun getDogListFromDatabase(): List<String> = animalDatabase.animalDao().getDogsUrls()
+
+    suspend fun addCattoDatabase(url: String) {
+        animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
+    }
+
+    suspend fun addDogtoDatabase(url: String) {
+        animalDatabase.animalDao().addUrl(AnimalUrl(url, "DOG"))
+    }
+
+    suspend fun deleteCatFromDatabase(url: String) {
+        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
+    }
+
+    suspend fun deleteDogFromDatabase(url: String) {
+        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
+    }
+
     /**
      * Singleton object to access the database
      */
