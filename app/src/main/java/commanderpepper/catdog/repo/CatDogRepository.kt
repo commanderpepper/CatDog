@@ -15,48 +15,6 @@ object CatDogRepository {
 
     private suspend fun getDogUrl() = dogService.getDog().url
 
-    /**
-     * Gets cat urls and filters them. Rejects any cat urls that aren't jpgs or pngs.
-     */
-    fun getUseableCatUrlFromAPI(): String {
-        var catUrl = ""
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                while (!catUrl.contains("jpg|png".toRegex())) {
-                    catUrl = getCatUrl()
-                }
-            }
-        }
-        return catUrl
-    }
-
-    /**
-     * Get dog urls and filters them. Rejects any cat urls that aren't jpgs, pngs or gifs
-     */
-    fun getUseableDogUrlFromAPI(): String {
-        var dogUrl = ""
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                while (!dogUrl.contains("gif|jpg|png".toRegex())) {
-                    dogUrl = getDogUrl()
-                }
-            }
-        }
-        return dogUrl
-    }
-
-
-
-    /**
-     * Get a list of dog urls
-     */
-    fun getListOfDogUrls(amount: Int): List<String> {
-        val dogUrls = mutableListOf<String>()
-        for (i in 0 until amount) {
-            dogUrls.add(getUseableDogUrlFromAPI())
-        }
-        return dogUrls.toList()
-    }
 
     suspend fun getCat(): String {
         var catUrl = ""

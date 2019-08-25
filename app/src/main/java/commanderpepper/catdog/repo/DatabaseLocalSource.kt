@@ -11,17 +11,27 @@ import kotlinx.coroutines.withContext
 
 class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
-    /**
-     * Get list of  favorite dogs and cats
-     */
-    fun getList(): List<String> {
-        var url = listOf<String>()
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                url = animalDatabase.animalDao().getUrls()
-            }
-        }
-        return url
+
+    suspend fun getListFromDatabase(): List<String> = animalDatabase.animalDao().getUrls()
+
+    suspend fun getCatListFromDatabase(): List<String> = animalDatabase.animalDao().getCatUrls()
+
+    suspend fun getDogListFromDatabase(): List<String> = animalDatabase.animalDao().getDogsUrls()
+
+    suspend fun addCattoDatabase(url: String) {
+        animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
+    }
+
+    suspend fun addDogtoDatabase(url: String) {
+        animalDatabase.animalDao().addUrl(AnimalUrl(url, "DOG"))
+    }
+
+    suspend fun deleteCatFromDatabase(url: String) {
+        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
+    }
+
+    suspend fun deleteDogFromDatabase(url: String) {
+        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
     }
 
     /**
@@ -96,40 +106,6 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
-    //This can be done better I think
-    fun deleteAnimal(url: String) {
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                try {
-                    animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
-                } catch (e: SQLiteException) {
-                    animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
-                }
-            }
-        }
-    }
-
-    suspend fun getListFromDatabase(): List<String> = animalDatabase.animalDao().getUrls()
-
-    suspend fun getCatListFromDatabase(): List<String> = animalDatabase.animalDao().getCatUrls()
-
-    suspend fun getDogListFromDatabase(): List<String> = animalDatabase.animalDao().getDogsUrls()
-
-    suspend fun addCattoDatabase(url: String) {
-        animalDatabase.animalDao().addUrl(AnimalUrl(url, "CAT"))
-    }
-
-    suspend fun addDogtoDatabase(url: String) {
-        animalDatabase.animalDao().addUrl(AnimalUrl(url, "DOG"))
-    }
-
-    suspend fun deleteCatFromDatabase(url: String) {
-        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "CAT"))
-    }
-
-    suspend fun deleteDogFromDatabase(url: String) {
-        animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
-    }
 
     /**
      * Singleton object to access the database

@@ -143,11 +143,20 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
 
     private fun saveCatUrlToDatabase(url: String) {
         Log.d("SAVECAT", "Saving CAT URL")
-        localDataSource.addCat(url)
+        runBlocking {
+            withContext(context) {
+                localDataSource.addCattoDatabase(url)
+            }
+        }
     }
 
     private fun saveDogUrlToDatabase(url: String) {
-        localDataSource.addDog(url)
+        runBlocking {
+            withContext(context) {
+                localDataSource.addDogtoDatabase(url)
+            }
+        }
+
     }
 
     private fun saveUrlToDatabaseUsingPosition(url: String, position: Int) {
@@ -159,12 +168,20 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
     }
 
     private fun deleteCatUrlFromDatabase(url: String) {
-        localDataSource.deleteCat(url)
+        runBlocking {
+            withContext(context) {
+                localDataSource.deleteCatFromDatabase(url)
+            }
+        }
         getUrls()
     }
 
     private fun deleteDogUrlFromDatabase(url: String) {
-        localDataSource.deleteDog(url)
+        runBlocking {
+            withContext(context) {
+                localDataSource.deleteDogFromDatabase(url)
+            }
+        }
         getUrls()
     }
 
