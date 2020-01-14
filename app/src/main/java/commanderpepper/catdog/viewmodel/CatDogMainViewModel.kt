@@ -1,5 +1,6 @@
 package commanderpepper.catdog.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import commanderpepper.catdog.repo.CatDogRepository
@@ -22,7 +23,12 @@ class CatDogMainViewModel : ViewModel() {
         }
 
         runBlocking {
-            catUrl = catDeffered.await()
+            catUrl = try {
+                catDeffered.await()
+            } catch (exception: Exception) {
+                Log.e("Main", exception.toString())
+                "error"
+            }
         }
 
         return catUrl
@@ -38,7 +44,12 @@ class CatDogMainViewModel : ViewModel() {
         }
 
         runBlocking {
-            dogUrl = dogDeffered.await()
+            dogUrl = try {
+                dogDeffered.await()
+            } catch (exception: Exception) {
+                Log.e("Main", exception.toString())
+                "error"
+            }
         }
 
         return dogUrl

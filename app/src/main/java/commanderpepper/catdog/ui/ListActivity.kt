@@ -1,10 +1,9 @@
 package commanderpepper.catdog.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.ActivityListBinding
 

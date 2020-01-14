@@ -1,17 +1,12 @@
 package commanderpepper.catdog.ui
 
-import android.app.ActionBar
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import commanderpepper.catdog.CatDogConstants
 import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R

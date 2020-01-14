@@ -1,6 +1,3 @@
 package commanderpepper.catdog.models
 
-interface Animal {
-
-
-}
+interface Animal
