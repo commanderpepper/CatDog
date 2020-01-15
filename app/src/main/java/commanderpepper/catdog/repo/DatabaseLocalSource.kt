@@ -1,7 +1,6 @@
 package commanderpepper.catdog.repo
 
 import android.content.Context
-import android.database.sqlite.SQLiteException
 import android.util.Log
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase

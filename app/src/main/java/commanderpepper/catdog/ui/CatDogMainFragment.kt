@@ -2,7 +2,6 @@ package commanderpepper.catdog.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import commanderpepper.catdog.CatDogConstants
 import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.MainFragmentBinding
-import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.viewmodel.CatDogMainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class CatDogMainFragment : Fragment() {
 
@@ -41,8 +35,13 @@ class CatDogMainFragment : Fragment() {
     /**
      * Creates reference to buttons and sets urls for the dog and cat button images
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: MainFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding: MainFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
 
         catButton = binding.catButton
         dogButton = binding.dogButton
@@ -51,19 +50,35 @@ class CatDogMainFragment : Fragment() {
         catDogMainViewModel.catUrl = catDogMainViewModel.getUseableCatUrl()
         catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
 
-        Glide.with(this)
-            .load(catDogMainViewModel.catUrl)
-            .into(catButton)
-
-        if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
+        if (catDogMainViewModel.catUrl == "error") {
             Glide.with(this)
-                .load(catDogMainViewModel.dogUrl)
-                .into(dogButton)
+                .load(R.drawable.loading_error)
+                .into(catButton)
+
+            catButton.isActivated = false
         } else {
             Glide.with(this)
-                .asGif()
-                .load(catDogMainViewModel.dogUrl)
+                .load(catDogMainViewModel.catUrl)
+                .into(catButton)
+        }
+
+        if (catDogMainViewModel.dogUrl == "error") {
+            Glide.with(this)
+                .load(R.drawable.loading_error)
                 .into(dogButton)
+
+            dogButton.isActivated = false
+        } else {
+            if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
+                Glide.with(this)
+                    .load(catDogMainViewModel.dogUrl)
+                    .into(dogButton)
+            } else {
+                Glide.with(this)
+                    .asGif()
+                    .load(catDogMainViewModel.dogUrl)
+                    .into(dogButton)
+            }
         }
 
         val intent = Intent(context, ListActivity::class.java)

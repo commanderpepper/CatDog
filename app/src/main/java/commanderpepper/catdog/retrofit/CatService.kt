@@ -1,7 +1,6 @@
 package commanderpepper.catdog.retrofit
 
 import commanderpepper.catdog.CatDogConstants
-import commanderpepper.catdog.R
 import commanderpepper.catdog.models.Cat
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory

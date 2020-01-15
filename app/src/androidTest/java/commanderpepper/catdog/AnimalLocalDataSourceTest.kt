@@ -2,7 +2,6 @@ package commanderpepper.catdog
 
 import commanderpepper.catdog.repo.DatabaseLocalSource
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before

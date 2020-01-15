@@ -1,16 +1,11 @@
 package commanderpepper.catdog
 
-import androidx.room.Room
-import androidx.test.InstrumentationRegistry
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
 import org.junit.Assert.assertThat
-
 import org.junit.Before
 import org.junit.Test
 
@@ -29,7 +24,7 @@ class AnimalDatabaseTest {
 
     @Test
     fun addUrl() = runBlocking {
-        val url: String = "this url"
+        val url = "this url"
         val animal = "DOG"
 
         launch {
