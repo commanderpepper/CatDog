@@ -30,7 +30,7 @@ class CatDogListFragment : Fragment() {
     /**
      * Takes in the option from the user.
      */
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         option = activity?.intent?.extras?.getString("Option") ?: "Where's the data?"
         Log.d("ListFragment", option)
@@ -63,7 +63,7 @@ class CatDogListFragment : Fragment() {
         viewAdapter = CatDogAdapter(option, listViewModel)
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
-        listViewModel.catDogUrls.observe(this, Observer {
+        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
             Log.d("LISTA", it.toString())
             viewAdapter.submitList(it)
         })

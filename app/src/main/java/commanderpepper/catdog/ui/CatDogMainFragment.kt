@@ -56,6 +56,7 @@ class CatDogMainFragment : Fragment() {
                 .into(catButton)
 
             catButton.isActivated = false
+            catButton.isEnabled = false
         } else {
             Glide.with(this)
                 .load(catDogMainViewModel.catUrl)
@@ -68,6 +69,7 @@ class CatDogMainFragment : Fragment() {
                 .into(dogButton)
 
             dogButton.isActivated = false
+            dogButton.isEnabled = false
         } else {
             if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
                 Glide.with(this)
