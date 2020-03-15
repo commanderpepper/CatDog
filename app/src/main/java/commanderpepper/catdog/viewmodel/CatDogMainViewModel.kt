@@ -14,6 +14,7 @@ class CatDogMainViewModel : ViewModel() {
     var catUrl: String = ""
 
     fun getUseableCatUrl(): String {
+
         if (catUrl != "") {
             return catUrl
         }

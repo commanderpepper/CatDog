@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -29,7 +30,6 @@ class CatDogMainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         catDogMainViewModel = ViewModelProviders.of(this).get(CatDogMainViewModel::class.java)
-
     }
 
     /**
@@ -51,64 +51,66 @@ class CatDogMainFragment : Fragment() {
         catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
 
         if (catDogMainViewModel.catUrl == "error") {
-            Glide.with(this)
-                .load(R.drawable.loading_error)
-                .into(catButton)
-
+            loadErrorImage(catButton)
             catButton.isActivated = false
             catButton.isEnabled = false
         } else {
-            Glide.with(this)
-                .load(catDogMainViewModel.catUrl)
-                .into(catButton)
+            loadImageIntoGlide(catDogMainViewModel.catUrl, catButton)
         }
 
         if (catDogMainViewModel.dogUrl == "error") {
-            Glide.with(this)
-                .load(R.drawable.loading_error)
-                .into(dogButton)
-
+            loadErrorImage(dogButton)
             dogButton.isActivated = false
             dogButton.isEnabled = false
         } else {
             if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
-                Glide.with(this)
-                    .load(catDogMainViewModel.dogUrl)
-                    .into(dogButton)
+                loadImageIntoGlide(catDogMainViewModel.dogUrl, dogButton)
             } else {
-                Glide.with(this)
-                    .asGif()
-                    .load(catDogMainViewModel.dogUrl)
-                    .into(dogButton)
+                loadGifIntoGlide(catDogMainViewModel.dogUrl, dogButton)
             }
         }
 
         val intent = Intent(context, ListActivity::class.java)
 
         catButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                this.putString("Option", Choice.CAT.toString())
-            }
-            intent.putExtras(bundle)
-            startActivity(intent)
+            startListActivity(intent, Choice.CAT.toString())
         }
 
         dogButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                this.putString("Option", Choice.DOG.toString())
-            }
-            intent.putExtras(bundle)
-            startActivity(intent)
+            startListActivity(intent, Choice.DOG.toString())
         }
 
         bothButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                this.putString("Option", Choice.BOTH.toString())
-            }
-            intent.putExtras(bundle)
-            startActivity(intent)
+            startListActivity(intent, Choice.BOTH.toString())
         }
 
-        return binding.root
+        return binding.mainLayout
+    }
+
+    private fun loadErrorImage(imageView: ImageView) {
+        Glide.with(this)
+            .load(R.drawable.loading_error)
+            .into(imageView)
+    }
+
+    private fun startListActivity(intent: Intent, option: String) {
+        val bundle = Bundle().apply {
+            this.putString("Option", option)
+        }
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    private fun loadImageIntoGlide(url: String, imageView: ImageView) {
+        Glide.with(this)
+            .load(url)
+            .into(imageView)
+    }
+
+    private fun loadGifIntoGlide(url: String, imageView: ImageView) {
+        Glide.with(this)
+            .asGif()
+            .load(url)
+            .into(imageView)
     }
 }

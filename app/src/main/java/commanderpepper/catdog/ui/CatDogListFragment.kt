@@ -43,13 +43,7 @@ class CatDogListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
         listViewModel.option = option
-        Log.d("CATDOGURLS", listViewModel.catDogUrls.value.toString())
         listViewModel.getUrls()
-
-        Log.d("ViewModel", listViewModel.toString())
-        Log.d("ViewModel", listViewModel.catDogUrls.toString())
-        Log.d("ViewModel", listViewModel.catDogUrls.value!!.size.toString())
-        Log.d("ViewModel", listViewModel.catDogUrls.value.toString())
     }
 
     /**
@@ -64,12 +58,8 @@ class CatDogListFragment : Fragment() {
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
         listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
-            Log.d("LISTA", it.toString())
             viewAdapter.submitList(it)
         })
-
-        Log.d("Mist", listViewModel.catDogUrls.value.toString())
-
         /**
          * Checks to see if the list from favs is empty. If so, then display the imageView instead.
          */
@@ -92,7 +82,7 @@ class CatDogListFragment : Fragment() {
                     super.onScrollStateChanged(recyclerView, newState)
 
                     if (!recyclerView.canScrollVertically(1)) {
-                        listViewModel.addUrls(6)
+                        listViewModel.addUrls(3)
                     }
                 }
             })

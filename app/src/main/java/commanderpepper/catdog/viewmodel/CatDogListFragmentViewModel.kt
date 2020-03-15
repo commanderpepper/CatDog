@@ -5,14 +5,17 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.repo.DatabaseLocalSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
+    private lateinit var catDogFlow: Flow<UrlAnimal>
     var localDataSource: DatabaseLocalSource =
         DatabaseLocalSource.getInstance(application.applicationContext)!!
     lateinit var option: String
