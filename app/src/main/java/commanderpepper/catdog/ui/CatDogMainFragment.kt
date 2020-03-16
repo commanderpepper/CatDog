@@ -2,6 +2,7 @@ package commanderpepper.catdog.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,16 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import commanderpepper.catdog.Choice
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.MainFragmentBinding
 import commanderpepper.catdog.viewmodel.CatDogMainViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+
 
 class CatDogMainFragment : Fragment() {
 
@@ -47,28 +53,65 @@ class CatDogMainFragment : Fragment() {
         dogButton = binding.dogButton
         bothButton = binding.bothButton
 
-        catDogMainViewModel.catUrl = catDogMainViewModel.getUseableCatUrl()
-        catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
-
-        if (catDogMainViewModel.catUrl == "error") {
-            loadErrorImage(catButton)
-            catButton.isActivated = false
-            catButton.isEnabled = false
-        } else {
-            loadImageIntoGlide(catDogMainViewModel.catUrl, catButton)
+        lifecycleScope.launch {
+            catDogMainViewModel.catFlow
+                .catch {
+                    loadErrorImage(catButton)
+                    catButton.isActivated = false
+                    catButton.isEnabled = false
+                }
+                .collect { cat ->
+                    loadImageIntoGlide(cat.file, catButton)
+                }
         }
 
-        if (catDogMainViewModel.dogUrl == "error") {
-            loadErrorImage(dogButton)
-            dogButton.isActivated = false
-            dogButton.isEnabled = false
-        } else {
-            if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
-                loadImageIntoGlide(catDogMainViewModel.dogUrl, dogButton)
-            } else {
-                loadGifIntoGlide(catDogMainViewModel.dogUrl, dogButton)
-            }
+        lifecycleScope.launch {
+            catDogMainViewModel.dogFlow
+                .catch {
+                    loadErrorImage(dogButton)
+                    dogButton.isActivated = false
+                    dogButton.isEnabled = false
+                }
+                .collect { dog ->
+                    loadImageIntoGlide(dog.url, dogButton)
+                }
         }
+
+//        lifecycleScope.launch {
+//            catDogMainViewModel.getCatFlow()
+//                .catch {
+//                    Log.d("Flow", "Something went wrong")
+//                    loadErrorImage(catButton)
+//                    catButton.isActivated = false
+//                    catButton.isEnabled = false
+//                }
+//                .collect { cat ->
+//                    loadImageIntoGlide(cat.file, catButton)
+//                }
+//        }
+
+//        catDogMainViewModel.catUrl = catDogMainViewModel.getUseableCatUrl()
+//        catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
+
+//        if (catDogMainViewModel.catUrl == "error") {
+//            loadErrorImage(catButton)
+//            catButton.isActivated = false
+//            catButton.isEnabled = false
+//        } else {
+//            loadImageIntoGlide(catDogMainViewModel.catUrl, catButton)
+//        }
+//
+//        if (catDogMainViewModel.dogUrl == "error") {
+//            loadErrorImage(dogButton)
+//            dogButton.isActivated = false
+//            dogButton.isEnabled = false
+//        } else {
+//            if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
+//                loadImageIntoGlide(catDogMainViewModel.dogUrl, dogButton)
+//            } else {
+//                loadGifIntoGlide(catDogMainViewModel.dogUrl, dogButton)
+//            }
+//        }
 
         val intent = Intent(context, ListActivity::class.java)
 
@@ -112,5 +155,10 @@ class CatDogMainFragment : Fragment() {
             .asGif()
             .load(url)
             .into(imageView)
+    }
+
+    override fun onStart() {
+        super.onStart()
+//        scope.cancel()
     }
 }

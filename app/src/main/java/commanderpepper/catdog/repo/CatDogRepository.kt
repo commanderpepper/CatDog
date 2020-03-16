@@ -1,14 +1,14 @@
 package commanderpepper.catdog.repo
 
-import commanderpepper.catdog.models.AnimalUrl
-import commanderpepper.catdog.models.Cat
-import commanderpepper.catdog.models.Url
-import commanderpepper.catdog.models.UrlAnimal
+import android.util.Log
+import commanderpepper.catdog.models.*
 import commanderpepper.catdog.retrofit.CatService
 import commanderpepper.catdog.retrofit.DogService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 object CatDogRepository {
     private var catService: CatService = CatService.create()
@@ -49,6 +49,18 @@ object CatDogRepository {
             dogUrls.add(getDog())
         }
         return dogUrls
+    }
+
+    fun getCatFlow(): Flow<Cat> {
+        return flow {
+            emit(Cat(getCat()))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getDogFlow(): Flow<Dog> {
+        return flow {
+            emit(Dog(getDog()))
+        }.flowOn(Dispatchers.IO)
     }
 
     fun getUrls(options: String, amount: Int): Flow<UrlAnimal> {
