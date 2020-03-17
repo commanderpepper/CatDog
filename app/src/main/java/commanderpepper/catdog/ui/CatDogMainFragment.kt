@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.collect
 
 class CatDogMainFragment : Fragment() {
 
-    lateinit var catDogMainViewModel: CatDogMainViewModel
+    private lateinit var catDogMainViewModel: CatDogMainViewModel
     private lateinit var catButton: ImageButton
     private lateinit var dogButton: ImageButton
     private lateinit var bothButton: Button
@@ -54,64 +54,30 @@ class CatDogMainFragment : Fragment() {
         bothButton = binding.bothButton
 
         lifecycleScope.launch {
-            catDogMainViewModel.catFlow
-                .catch {
-                    loadErrorImage(catButton)
-                    catButton.isActivated = false
-                    catButton.isEnabled = false
-                }
-                .collect { cat ->
-                    loadImageIntoGlide(cat.file, catButton)
-                }
+            val catUrl = catDogMainViewModel.getUseableCatUrl()
+            if (catUrl != "error") {
+                loadImageIntoGlide(catUrl, catButton)
+            } else {
+                loadErrorImage(catButton)
+                disableButton(catButton)
+                disableButton(bothButton)
+            }
         }
 
         lifecycleScope.launch {
-            catDogMainViewModel.dogFlow
-                .catch {
-                    loadErrorImage(dogButton)
-                    dogButton.isActivated = false
-                    dogButton.isEnabled = false
+            val dogUrl = catDogMainViewModel.getUseableDogUrl()
+            if (dogUrl != "error") {
+                if (dogUrl.contains("gif")) {
+                    loadGifIntoGlide(dogUrl, dogButton)
+                } else {
+                    loadImageIntoGlide(dogUrl, dogButton)
                 }
-                .collect { dog ->
-                    loadImageIntoGlide(dog.url, dogButton)
-                }
+            } else {
+                loadErrorImage(dogButton)
+                disableButton(dogButton)
+                disableButton(bothButton)
+            }
         }
-
-//        lifecycleScope.launch {
-//            catDogMainViewModel.getCatFlow()
-//                .catch {
-//                    Log.d("Flow", "Something went wrong")
-//                    loadErrorImage(catButton)
-//                    catButton.isActivated = false
-//                    catButton.isEnabled = false
-//                }
-//                .collect { cat ->
-//                    loadImageIntoGlide(cat.file, catButton)
-//                }
-//        }
-
-//        catDogMainViewModel.catUrl = catDogMainViewModel.getUseableCatUrl()
-//        catDogMainViewModel.dogUrl = catDogMainViewModel.getUseableDogUrl()
-
-//        if (catDogMainViewModel.catUrl == "error") {
-//            loadErrorImage(catButton)
-//            catButton.isActivated = false
-//            catButton.isEnabled = false
-//        } else {
-//            loadImageIntoGlide(catDogMainViewModel.catUrl, catButton)
-//        }
-//
-//        if (catDogMainViewModel.dogUrl == "error") {
-//            loadErrorImage(dogButton)
-//            dogButton.isActivated = false
-//            dogButton.isEnabled = false
-//        } else {
-//            if (catDogMainViewModel.dogUrl.contains("jpg|png".toRegex())) {
-//                loadImageIntoGlide(catDogMainViewModel.dogUrl, dogButton)
-//            } else {
-//                loadGifIntoGlide(catDogMainViewModel.dogUrl, dogButton)
-//            }
-//        }
 
         val intent = Intent(context, ListActivity::class.java)
 
@@ -128,6 +94,11 @@ class CatDogMainFragment : Fragment() {
         }
 
         return binding.mainLayout
+    }
+
+    private fun disableButton(view: View) {
+        view.isActivated = false
+        view.isEnabled = false
     }
 
     private fun loadErrorImage(imageView: ImageView) {
@@ -157,8 +128,4 @@ class CatDogMainFragment : Fragment() {
             .into(imageView)
     }
 
-    override fun onStart() {
-        super.onStart()
-//        scope.cancel()
-    }
 }
