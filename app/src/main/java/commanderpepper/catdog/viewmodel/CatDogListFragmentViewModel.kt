@@ -15,8 +15,7 @@ import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
-    private lateinit var catDogFlow: Flow<UrlAnimal>
-    var localDataSource: DatabaseLocalSource =
+    private val localDataSource: DatabaseLocalSource =
         DatabaseLocalSource.getInstance(application.applicationContext)!!
     lateinit var option: String
     val context = viewModelScope.coroutineContext + Dispatchers.IO

@@ -1,5 +1,6 @@
 package commanderpepper.catdog.repo
 
+import android.graphics.Path
 import android.util.Log
 import commanderpepper.catdog.models.*
 import commanderpepper.catdog.retrofit.CatService
@@ -11,13 +12,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 object CatDogRepository {
-    private var catService: CatService = CatService.create()
-    private var dogService: DogService = DogService.create()
+    private val catService: CatService = CatService.create()
+    private val dogService: DogService = DogService.create()
+    private val
 
     private suspend fun getCatUrl() = catService.getCat().file
 
     private suspend fun getDogUrl() = dogService.getDog().url
-
 
     suspend fun getCat(): String {
         var catUrl = ""
@@ -63,9 +64,14 @@ object CatDogRepository {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getUrls(options: String, amount: Int): Flow<UrlAnimal> {
-        return flow {
-            getCatList(amount).map { it -> UrlAnimal.UrlCat(Cat(it)) }.asFlow()
+    suspend fun getUrls(option: Option, amount: Int): Flow<List<UrlAnimal>> {
+        return when (option) {
+            Option.CAT -> //TODO
+            Option.DOG -> //TODO
+            Option.BOTH -> //TODO
+            Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
+            Option.DOGFAV -> //TODO
         }
     }
 }
+

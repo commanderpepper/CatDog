@@ -10,7 +10,6 @@ import kotlinx.coroutines.withContext
 
 class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
-
     suspend fun getListFromDatabase(): List<String> = animalDatabase.animalDao().getUrls()
 
     suspend fun getCatListFromDatabase(): List<String> = animalDatabase.animalDao().getCatUrls()
@@ -105,7 +104,6 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
-
     /**
      * Singleton object to access the database
      */
@@ -119,6 +117,19 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
                 }
             }
             return instance
+        }
+
+        fun getInstance(): DatabaseLocalSource {
+            return instance
+                ?: throw  UninitializedPropertyAccessException("DatabaseLocalSource must be initialized")
+        }
+
+        fun createInstance(context: Context) {
+            if (instance == null) {
+                synchronized(DatabaseLocalSource::javaClass) {
+                    instance = DatabaseLocalSource(AnimalDatabase.getInstance(context))
+                }
+            }
         }
 
         fun clearInstance() {
