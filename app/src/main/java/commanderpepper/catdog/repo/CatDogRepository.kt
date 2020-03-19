@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 object CatDogRepository {
     private val catService: CatService = CatService.create()
     private val dogService: DogService = DogService.create()
-    private val
+    private val databaseLocalSource = DatabaseLocalSource.getInstance()
 
     private suspend fun getCatUrl() = catService.getCat().file
 

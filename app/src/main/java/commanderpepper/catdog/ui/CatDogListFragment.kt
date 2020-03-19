@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdoglistFragmentBinding
 import commanderpepper.catdog.models.Option
+import commanderpepper.catdog.models.toOption
 import commanderpepper.catdog.ui.recyclerview.CatDogAdapter
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
@@ -35,7 +36,7 @@ class CatDogListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         option = activity?.intent?.extras?.getString("Option") ?: "Where's the data?"
-        optionSC = activity?.intent?.extras?.get("OPTION") as Option ?: Option.CAT
+        optionSC = option.toOption()
         Log.d("ListFragment", option)
     }
 
@@ -46,6 +47,7 @@ class CatDogListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
         listViewModel.option = option
+        listViewModel.optionSC = optionSC
         listViewModel.getUrls()
     }
 

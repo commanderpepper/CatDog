@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import commanderpepper.catdog.models.Option
+import commanderpepper.catdog.models.Url
 import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.repo.DatabaseLocalSource
@@ -15,10 +17,17 @@ import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
-    private val localDataSource: DatabaseLocalSource =
-        DatabaseLocalSource.getInstance(application.applicationContext)!!
+    private lateinit var urlFlow: Flow<List<Url>>
+
+//    private val localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
+
+    val repository = CatDogRepository
+
     lateinit var option: String
+    lateinit var optionSC: Option
+
     val context = viewModelScope.coroutineContext + Dispatchers.IO
+
 
     /**
      * Sets the catDogUrls list according to the option from the user
