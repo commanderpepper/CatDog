@@ -16,12 +16,10 @@ class CatDogRAdapter(
     private val parentScope: CoroutineScope,
     private val urls: List<Url>,
     private val saveFavUrl: (Url) -> (Unit),
-    private val removeDavUrl: (Url) -> (Unit)
+    private val removeDavUrl: (Url) -> (Unit),
+    private val checkIfFavorite: (Url) -> Boolean
 ) :
     RecyclerView.Adapter<CatDogRViewHolder>() {
-
-    private val job = SupervisorJob()
-    private val recyclerScope = CoroutineScope(parentScope.coroutineContext + job)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatDogRViewHolder {
         return CatDogRViewHolder(
@@ -40,6 +38,7 @@ class CatDogRAdapter(
     }
 
     override fun onBindViewHolder(holder: CatDogRViewHolder, position: Int) {
+        holder.setFavStatus(checkIfFavorite, urls[position])
         holder.setToNotFav()
         holder.setFavOnClickListener(
             urls[position],

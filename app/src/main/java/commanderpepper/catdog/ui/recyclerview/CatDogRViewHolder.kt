@@ -34,4 +34,13 @@ class CatDogRViewHolder(private val binding: CatdogItemBinding) :
             }
         }
     }
+
+    fun setFavStatus(checkIfFavorite: (Url) -> Boolean, url: Url) {
+        if(checkIfFavorite(url)){
+            setToFav()
+        }
+        else{
+            setToNotFav()
+        }
+    }
 }
