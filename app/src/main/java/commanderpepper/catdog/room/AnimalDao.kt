@@ -30,5 +30,8 @@ interface AnimalDao {
     @Query("DELETE FROM animal")
     fun clearTableForTesting()
 
+    @Query("SELECT COUNT(*) from animal WHERE url = :url")
+    suspend fun checkForAnimalUrl(url: String): Int
+
 }
 

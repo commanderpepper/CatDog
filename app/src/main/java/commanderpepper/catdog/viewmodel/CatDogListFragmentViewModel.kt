@@ -5,29 +5,56 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import commanderpepper.catdog.models.Cat
 import commanderpepper.catdog.models.Option
-import commanderpepper.catdog.models.Url
 import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.repo.DatabaseLocalSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.toList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     val catDogUrls = MutableLiveData<List<String>>()
-    private lateinit var urlFlow: Flow<List<Url>>
+    private val urlAnimalFlow: Channel<UrlAnimal> = Channel(Channel.UNLIMITED)
+    val urlFlow: Flow<UrlAnimal> = urlAnimalFlow.consumeAsFlow()
 
 //    private val localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
 
     val repository = CatDogRepository
+
+    init {
+        viewModelScope.launch {
+            CatDogRepository.getCatList(1).forEach {
+                urlAnimalFlow.send(UrlAnimal.UrlCat(Cat(it)))
+            }
+
+        }
+
+    }
 
     lateinit var option: String
     lateinit var optionSC: Option
 
     val context = viewModelScope.coroutineContext + Dispatchers.IO
 
+    suspend fun getUrlAnimals() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (optionSC) {
+                is Option.CAT -> repository.getCatList(4).map {
+                    UrlAnimal.UrlCat(Cat(it))
+                }.forEach {
+                    urlAnimalFlow.send(it)
+                }
+            }
+        }
+
+    }
 
     /**
      * Sets the catDogUrls list according to the option from the user
@@ -151,6 +178,7 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
             "BOTHFAV" -> deleteUrlFromDatabaseUsingUrl(url, position)
         }
     }
+
 
     private fun saveCatUrlToDatabase(url: String) {
         Log.d("SAVECAT", "Saving CAT URL")

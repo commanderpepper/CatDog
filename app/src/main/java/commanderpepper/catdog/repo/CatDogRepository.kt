@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 
 object CatDogRepository {
     private val catService: CatService = CatService.create()
@@ -64,12 +65,35 @@ object CatDogRepository {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun saveUrl(url: UrlAnimal) {
+        when (url) {
+            is UrlAnimal.UrlDog -> databaseLocalSource.addDog(url.dog.url)
+            is UrlAnimal.UrlCat -> databaseLocalSource.addCat(url.cat.file)
+        }
+    }
+
+    fun deleteUrl(url: UrlAnimal) {
+        when (url) {
+            is UrlAnimal.UrlDog -> databaseLocalSource.deleteDog(url.dog.url)
+            is UrlAnimal.UrlCat -> databaseLocalSource.deleteCat(url.cat.file)
+        }
+    }
+
+    fun checkIfFavorite(url: UrlAnimal): Boolean {
+        return when (url) {
+            is UrlAnimal.UrlCat -> databaseLocalSource.checkForAnimalUrl(url.cat.file)
+            is UrlAnimal.UrlDog -> databaseLocalSource.checkForAnimalUrl(url.dog.url)
+        }
+    }
+
     suspend fun getUrls(option: Option, amount: Int): Flow<List<UrlAnimal>> {
         return when (option) {
             Option.CAT -> //TODO
-            Option.DOG -> //TODO
-            Option.BOTH -> //TODO
-            Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
+                Option.DOG
+            -> //TODO
+                Option.BOTH
+            -> //TODO
+                Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
             Option.DOGFAV -> //TODO
         }
     }

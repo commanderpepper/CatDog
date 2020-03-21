@@ -15,10 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdoglistFragmentBinding
 import commanderpepper.catdog.models.Option
+import commanderpepper.catdog.models.Url
+import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.models.toOption
+import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.ui.recyclerview.CatDogAdapter
+import commanderpepper.catdog.ui.recyclerview.CatDogRAdapter
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 
 class CatDogListFragment : Fragment() {
 
@@ -27,7 +33,7 @@ class CatDogListFragment : Fragment() {
     private lateinit var listViewModel: CatDogListFragmentViewModel
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: CatDogAdapter
+    private lateinit var viewAdapter: CatDogRAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     /**
@@ -54,12 +60,35 @@ class CatDogListFragment : Fragment() {
     /**
      * Creates a view model and an adapter.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: CatdoglistFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.catdoglist_fragment, container, false)
 
         viewManager = LinearLayoutManager(context)
-        viewAdapter = CatDogAdapter(option, listViewModel)
+//        viewAdapter = CatDogAdapter(option, listViewModel)
+
+        val saveUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::saveUrl
+        val deleteUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::deleteUrl
+        val checkForFavorite: (UrlAnimal) -> Boolean = CatDogRepository::checkIfFavorite
+
+        runBlocking {
+            val urlAnimalList = listViewModel.urlFlow.toList()
+        }
+
+
+        viewAdapter = CatDogRAdapter(
+            runBlocking {
+                listViewModel.urlFlow.toList()
+            },
+            saveFavUrl = saveUrlAnimal,
+            removeDavUrl = deleteUrlAnimal,
+            checkIfFavorite = checkForFavorite
+        )
+
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
         listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {

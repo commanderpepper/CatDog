@@ -5,19 +5,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import commanderpepper.catdog.R
-import commanderpepper.catdog.models.Url
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.count
+import commanderpepper.catdog.models.UrlAnimal
 
 class CatDogRAdapter(
-    private val parentScope: CoroutineScope,
-    private val urls: List<Url>,
-    private val saveFavUrl: (Url) -> (Unit),
-    private val removeDavUrl: (Url) -> (Unit),
-    private val checkIfFavorite: (Url) -> Boolean
+    private val urls: List<UrlAnimal>,
+    private val saveFavUrl: (UrlAnimal) -> (Unit),
+    private val removeDavUrl: (UrlAnimal) -> (Unit),
+    private val checkIfFavorite: (UrlAnimal) -> Boolean
 ) :
     RecyclerView.Adapter<CatDogRViewHolder>() {
 
@@ -32,14 +26,12 @@ class CatDogRAdapter(
         )
     }
 
-    @InternalCoroutinesApi
     override fun getItemCount(): Int {
         return urls.size
     }
 
     override fun onBindViewHolder(holder: CatDogRViewHolder, position: Int) {
         holder.setFavStatus(checkIfFavorite, urls[position])
-        holder.setToNotFav()
         holder.setFavOnClickListener(
             urls[position],
             saveFavUrl,

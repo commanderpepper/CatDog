@@ -5,6 +5,8 @@ import android.util.Log
 import commanderpepper.catdog.models.AnimalUrl
 import commanderpepper.catdog.room.AnimalDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
@@ -102,6 +104,20 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
                 animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
             }
         }
+    }
+
+    fun checkForAnimalUrl(animalUrl: String): Boolean {
+        val result = ConflatedBroadcastChannel<Boolean>()
+        result.offer(false)
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                val amount = animalDatabase.animalDao().checkForAnimalUrl(animalUrl)
+                if (amount > 1) {
+                    result.offer(true)
+                }
+            }
+        }
+        return result.value
     }
 
     /**
