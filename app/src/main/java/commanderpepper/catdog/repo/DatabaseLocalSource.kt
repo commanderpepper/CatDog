@@ -60,6 +60,18 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         return url
     }
 
+    suspend fun getAllFavoriteCatUrls(): List<String> {
+        return withContext(Dispatchers.IO) {
+            animalDatabase.animalDao().getCatUrls()
+        }
+    }
+
+    suspend fun getAllFavoriteDogUrls(): List<String>{
+        return withContext(Dispatchers.IO){
+            animalDatabase.animalDao().getDogsUrls()
+        }
+    }
+
     /**
      * Add a cat to the database
      */

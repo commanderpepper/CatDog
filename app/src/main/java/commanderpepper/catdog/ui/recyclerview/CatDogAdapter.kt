@@ -29,7 +29,7 @@ class CatDogAdapter(val option: String, val viewModel: CatDogListFragmentViewMod
         getItem(position).let { url ->
             Log.d("ViewHolder", url)
             holder.bind(url)
-            holder.setFavOnClickListener(url, position)
+//            holder.setFavOnClickListener(url, position)
         }
     }
 

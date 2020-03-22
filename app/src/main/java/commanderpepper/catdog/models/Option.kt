@@ -14,6 +14,7 @@ fun String.toOption(): Option {
         "DOG" -> Option.DOG
         "CATFAV" -> Option.CATFAV
         "DOGFAV" -> Option.DOGFAV
+        "BOTH" -> Option.BOTH
         else -> Option.BOTH
     }
 }

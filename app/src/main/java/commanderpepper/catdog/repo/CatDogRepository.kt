@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
+import retrofit2.http.Url
 
 object CatDogRepository {
     private val catService: CatService = CatService.create()
@@ -86,16 +87,30 @@ object CatDogRepository {
         }
     }
 
-    suspend fun getUrls(option: Option, amount: Int): Flow<List<UrlAnimal>> {
-        return when (option) {
-            Option.CAT -> //TODO
-                Option.DOG
-            -> //TODO
-                Option.BOTH
-            -> //TODO
-                Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
-            Option.DOGFAV -> //TODO
-        }
+    suspend fun getFavoriteCats(): List<String> {
+        return databaseLocalSource.getAllFavoriteCatUrls()
     }
+
+    suspend fun getFavoriteDogs(): List<String> {
+        return databaseLocalSource.getAllFavoriteDogUrls()
+    }
+
+    suspend fun getCatsAndDogs(amount: Int): List<UrlAnimal> {
+        val cats = getCatList(amount / 2).map { UrlAnimal.UrlCat(Cat(it)) }
+        val dogs = getDogList(amount / 2).map { UrlAnimal.UrlDog(Dog(it)) }
+        return cats.intersect(dogs).toList()
+    }
+
+//    suspend fun getUrls(option: Option, amount: Int): Flow<List<UrlAnimal>> {
+//        return when (option) {
+//            Option.CAT -> //TODO
+//                Option.DOG
+//            -> //TODO
+//                Option.BOTH
+//            -> //TODO
+//                Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
+//            Option.DOGFAV -> //TODO
+//        }
+//    }
 }
 

@@ -46,18 +46,18 @@ class CatDogViewHolder(
     /**
      * Contains logic to deal with user saving and unsaving urls. Calls the ViewModel.
      */
-    fun setFavOnClickListener(url: String, position: Int) {
-        binding.favImage.setOnClickListener {
-            if (binding.favImage.tag == "OFF") {
-                viewModel.saveFavoriteUrl(url, position)
-                binding.favImage.setImageDrawable(itemView.resources.getDrawable(R.drawable.btn_star_big_on))
-                binding.favImage.tag = "ON"
-
-            } else {
-                viewModel.deleteFavoriteUrl(url, position)
-                binding.favImage.setImageDrawable(itemView.resources.getDrawable(R.drawable.btn_star_big_off))
-                binding.favImage.tag = "OFF"
-            }
-        }
-    }
+//    fun setFavOnClickListener(url: String, position: Int) {
+//        binding.favImage.setOnClickListener {
+//            if (binding.favImage.tag == "OFF") {
+//                viewModel.saveFavoriteUrl(url, position)
+//                binding.favImage.setImageDrawable(itemView.resources.getDrawable(R.drawable.btn_star_big_on))
+//                binding.favImage.tag = "ON"
+//
+//            } else {
+//                viewModel.deleteFavoriteUrl(url, position)
+//                binding.favImage.setImageDrawable(itemView.resources.getDrawable(R.drawable.btn_star_big_off))
+//                binding.favImage.tag = "OFF"
+//            }
+//        }
+//    }
 }

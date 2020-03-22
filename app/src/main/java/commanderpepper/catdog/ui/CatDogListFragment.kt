@@ -8,23 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdoglistFragmentBinding
 import commanderpepper.catdog.models.Option
-import commanderpepper.catdog.models.Url
 import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.models.toOption
 import commanderpepper.catdog.repo.CatDogRepository
-import commanderpepper.catdog.ui.recyclerview.CatDogAdapter
 import commanderpepper.catdog.ui.recyclerview.CatDogRAdapter
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 class CatDogListFragment : Fragment() {
 
@@ -54,7 +54,10 @@ class CatDogListFragment : Fragment() {
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
         listViewModel.option = option
         listViewModel.optionSC = optionSC
-        listViewModel.getUrls()
+        lifecycleScope.launch {
+            listViewModel.getUrlAnimals()
+        }
+//        listViewModel.getUrls()
     }
 
     /**
@@ -75,53 +78,70 @@ class CatDogListFragment : Fragment() {
         val deleteUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::deleteUrl
         val checkForFavorite: (UrlAnimal) -> Boolean = CatDogRepository::checkIfFavorite
 
-        runBlocking {
-            val urlAnimalList = listViewModel.urlFlow.toList()
-        }
 
+//        lifecycleScope.launch {
+//            viewAdapter = CatDogRAdapter(
+//                listViewModel.urlFlow.toList().toMutableList(),
+//                saveFavUrl = saveUrlAnimal,
+//                removeDavUrl = deleteUrlAnimal,
+//                checkIfFavorite = checkForFavorite
+//            )
+//        }
 
         viewAdapter = CatDogRAdapter(
-            runBlocking {
-                listViewModel.urlFlow.toList()
-            },
+            mutableListOf(),
             saveFavUrl = saveUrlAnimal,
             removeDavUrl = deleteUrlAnimal,
             checkIfFavorite = checkForFavorite
         )
 
+        listViewModel.urlFlow.onEach {
+            viewAdapter.addUrl(it)
+            viewAdapter.notifyDataSetChanged()
+        }.launchIn(lifecycleScope)
+
+        recyclerView = binding.root.catDogList.apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
+//        lifecycleScope.launch {
+//            viewAdapter.addUrls(listViewModel.urlFlow.toList())
+//            viewAdapter.notifyDataSetChanged()
+//        }
+
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
-        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
-            viewAdapter.submitList(it)
-        })
+//        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
+//            viewAdapter.submitList(it)
+//        })
         /**
          * Checks to see if the list from favs is empty. If so, then display the imageView instead.
          */
-        if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
-            listViewModel.getUrls()
-            binding.listScrollView.visibility = View.GONE
-            binding.favsText.visibility = View.VISIBLE
-        } else {
-            recyclerView = binding.root.catDogList.apply {
-                layoutManager = viewManager
-                adapter = viewAdapter
-            }
+//        if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
+//            listViewModel.getUrls()
+//            binding.listScrollView.visibility = View.GONE
+//            binding.favsText.visibility = View.VISIBLE
+//        } else {
+//            recyclerView = binding.root.catDogList.apply {
+//                layoutManager = viewManager
+//                adapter = viewAdapter
+//            }
 
-            /**
-             * Adds a listener that activates when the user is at the end of the RecyclerView
-             * Allows for endless scrolling when choosing random animals
-             */
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-
-                    if (!recyclerView.canScrollVertically(1)) {
-                        listViewModel.addUrls(3)
-                    }
-                }
-            })
-        }
-
+        /**
+         * Adds a listener that activates when the user is at the end of the RecyclerView
+         * Allows for endless scrolling when choosing random animals
+         */
+//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                    super.onScrollStateChanged(recyclerView, newState)
+//
+//                    if (!recyclerView.canScrollVertically(1)) {
+//                        listViewModel.addUrls(3)
+//                    }
+//                }
+//            })
         return binding.root
+
     }
 }
