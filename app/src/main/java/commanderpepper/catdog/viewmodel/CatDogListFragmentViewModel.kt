@@ -1,9 +1,7 @@
 package commanderpepper.catdog.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import commanderpepper.catdog.models.Cat
 import commanderpepper.catdog.models.Dog
@@ -15,21 +13,16 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
-    val catDogUrls = MutableLiveData<List<String>>()
     private val urlAnimalChannel: Channel<UrlAnimal> = Channel(Channel.UNLIMITED)
-    val urlFlow: Flow<UrlAnimal> = urlAnimalChannel.consumeAsFlow()
+    private val urlAnimalList = mutableListOf<UrlAnimal>()
+    private var useList = false
 
     private val amount = 4
 
-//    private val localDataSource: DatabaseLocalSource = DatabaseLocalSource.getInstance(application.applicationContext)!!
-
     private val repository = CatDogRepository
 
-    lateinit var option: String
     lateinit var optionSC: Option
 
     val context = viewModelScope.coroutineContext + Dispatchers.IO
@@ -68,6 +61,22 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         this.forEach {
             urlAnimalChannel.send(it)
         }
+        urlAnimalList += this
+    }
+
+    fun getFlowOfUrlAnimals(): Flow<UrlAnimal> {
+        return urlAnimalChannel.consumeAsFlow()
+    }
+
+    fun getListForAdapter(): MutableList<UrlAnimal> {
+        return if (useList) {
+            urlAnimalList
+        } else
+            mutableListOf()
+    }
+
+    fun fragmentDetach() {
+        useList = true
     }
 
     /**

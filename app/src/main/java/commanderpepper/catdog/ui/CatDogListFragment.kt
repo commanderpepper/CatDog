@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CatDogListFragment : Fragment() {
 
@@ -52,7 +53,6 @@ class CatDogListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
-        listViewModel.option = option
         listViewModel.optionSC = optionSC
         lifecycleScope.launch {
             listViewModel.getUrlAnimals()
@@ -88,14 +88,16 @@ class CatDogListFragment : Fragment() {
 //            )
 //        }
 
+        val flow = listViewModel.getFlowOfUrlAnimals()
+
         viewAdapter = CatDogRAdapter(
-            mutableListOf(),
+            listViewModel.getListForAdapter(),
             saveFavUrl = saveUrlAnimal,
             removeDavUrl = deleteUrlAnimal,
             checkIfFavorite = checkForFavorite
         )
 
-        listViewModel.urlFlow.onEach {
+        flow.onEach {
             viewAdapter.addUrl(it)
             viewAdapter.notifyDataSetChanged()
         }.launchIn(lifecycleScope)
@@ -132,16 +134,21 @@ class CatDogListFragment : Fragment() {
          * Adds a listener that activates when the user is at the end of the RecyclerView
          * Allows for endless scrolling when choosing random animals
          */
-//            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                    super.onScrollStateChanged(recyclerView, newState)
-//
-//                    if (!recyclerView.canScrollVertically(1)) {
-//                        listViewModel.addUrls(3)
-//                    }
-//                }
-//            })
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    lifecycleScope.launch {
+                        listViewModel.getUrlAnimals()
+                    }
+                }
+            }
+        })
         return binding.root
+    }
 
+    override fun onDetach() {
+        super.onDetach()
+        listViewModel.fragmentDetach()
     }
 }
