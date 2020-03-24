@@ -22,6 +22,7 @@ import commanderpepper.catdog.ui.recyclerview.CatDogRAdapter
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -77,17 +78,7 @@ class CatDogListFragment : Fragment() {
         val saveUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::saveUrl
         val deleteUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::deleteUrl
         val checkForFavorite: (UrlAnimal) -> Boolean = CatDogRepository::checkIfFavorite
-
-
-//        lifecycleScope.launch {
-//            viewAdapter = CatDogRAdapter(
-//                listViewModel.urlFlow.toList().toMutableList(),
-//                saveFavUrl = saveUrlAnimal,
-//                removeDavUrl = deleteUrlAnimal,
-//                checkIfFavorite = checkForFavorite
-//            )
-//        }
-
+        
         val flow = listViewModel.getFlowOfUrlAnimals()
 
         viewAdapter = CatDogRAdapter(
@@ -99,19 +90,12 @@ class CatDogListFragment : Fragment() {
 
         flow.onEach {
             viewAdapter.addUrl(it)
-            viewAdapter.notifyDataSetChanged()
         }.launchIn(lifecycleScope)
 
         recyclerView = binding.root.catDogList.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-
-//        lifecycleScope.launch {
-//            viewAdapter.addUrls(listViewModel.urlFlow.toList())
-//            viewAdapter.notifyDataSetChanged()
-//        }
-
 
         // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
 //        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
@@ -139,7 +123,7 @@ class CatDogListFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     lifecycleScope.launch {
-                        listViewModel.getUrlAnimals()
+                        listViewModel.getUrlAnimals(2)
                     }
                 }
             }

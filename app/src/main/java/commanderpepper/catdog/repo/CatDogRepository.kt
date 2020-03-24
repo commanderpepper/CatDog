@@ -98,19 +98,9 @@ object CatDogRepository {
     suspend fun getCatsAndDogs(amount: Int): List<UrlAnimal> {
         val cats = getCatList(amount / 2).map { UrlAnimal.UrlCat(Cat(it)) }
         val dogs = getDogList(amount / 2).map { UrlAnimal.UrlDog(Dog(it)) }
-        return cats.intersect(dogs).toList()
+        return cats.zip(dogs) { cat, dog ->
+            listOf<UrlAnimal>(cat, dog)
+        }.flatten()
     }
-
-//    suspend fun getUrls(option: Option, amount: Int): Flow<List<UrlAnimal>> {
-//        return when (option) {
-//            Option.CAT -> //TODO
-//                Option.DOG
-//            -> //TODO
-//                Option.BOTH
-//            -> //TODO
-//                Option.CATFAV -> DatabaseLocalSource.getInstance()!!.getCatListFromDatabase()
-//            Option.DOGFAV -> //TODO
-//        }
-//    }
 }
 

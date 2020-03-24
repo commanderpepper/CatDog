@@ -27,14 +27,9 @@ class CatDogRAdapter(
         )
     }
 
-    fun addUrls(list: List<UrlAnimal>) {
-        urls.addAll(list)
-//        notifyDataSetChanged()
-    }
-
     fun addUrl(url: UrlAnimal) {
         urls.add(url)
-//        notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
