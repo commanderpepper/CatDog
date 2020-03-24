@@ -58,7 +58,6 @@ class CatDogListFragment : Fragment() {
         lifecycleScope.launch {
             listViewModel.getUrlAnimals()
         }
-//        listViewModel.getUrls()
     }
 
     /**
@@ -73,12 +72,11 @@ class CatDogListFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.catdoglist_fragment, container, false)
 
         viewManager = LinearLayoutManager(context)
-//        viewAdapter = CatDogAdapter(option, listViewModel)
 
         val saveUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::saveUrl
         val deleteUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::deleteUrl
         val checkForFavorite: (UrlAnimal) -> Boolean = CatDogRepository::checkIfFavorite
-        
+
         val flow = listViewModel.getFlowOfUrlAnimals()
 
         viewAdapter = CatDogRAdapter(
@@ -90,6 +88,7 @@ class CatDogListFragment : Fragment() {
 
         flow.onEach {
             viewAdapter.addUrl(it)
+            viewAdapter.notifyItemRangeInserted(viewAdapter.itemCount, 1)
         }.launchIn(lifecycleScope)
 
         recyclerView = binding.root.catDogList.apply {
@@ -101,6 +100,7 @@ class CatDogListFragment : Fragment() {
 //        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
 //            viewAdapter.submitList(it)
 //        })
+        
         /**
          * Checks to see if the list from favs is empty. If so, then display the imageView instead.
          */

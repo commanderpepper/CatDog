@@ -29,7 +29,6 @@ class CatDogRAdapter(
 
     fun addUrl(url: UrlAnimal) {
         urls.add(url)
-        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
