@@ -1,17 +1,14 @@
 package commanderpepper.catdog.repo
 
-import android.graphics.Path
-import android.util.Log
-import commanderpepper.catdog.models.*
+import commanderpepper.catdog.models.Cat
+import commanderpepper.catdog.models.Dog
+import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.retrofit.CatService
 import commanderpepper.catdog.retrofit.DogService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.runBlocking
-import retrofit2.http.Url
 
 object CatDogRepository {
     private val catService: CatService = CatService.create()

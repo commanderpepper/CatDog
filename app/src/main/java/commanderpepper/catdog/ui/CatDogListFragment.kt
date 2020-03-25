@@ -16,17 +16,15 @@ import commanderpepper.catdog.R
 import commanderpepper.catdog.databinding.CatdoglistFragmentBinding
 import commanderpepper.catdog.models.Option
 import commanderpepper.catdog.models.UrlAnimal
+import commanderpepper.catdog.models.isFav
 import commanderpepper.catdog.models.toOption
 import commanderpepper.catdog.repo.CatDogRepository
 import commanderpepper.catdog.ui.recyclerview.CatDogRAdapter
 import commanderpepper.catdog.viewmodel.CatDogListFragmentViewModel
 import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CatDogListFragment : Fragment() {
 
@@ -55,9 +53,6 @@ class CatDogListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         listViewModel = ViewModelProviders.of(this).get(CatDogListFragmentViewModel::class.java)
         listViewModel.optionSC = optionSC
-        lifecycleScope.launch {
-            listViewModel.getUrlAnimals()
-        }
     }
 
     /**
@@ -73,6 +68,9 @@ class CatDogListFragment : Fragment() {
 
         viewManager = LinearLayoutManager(context)
 
+        /**
+         * Functions to pass to the recycler view adapter
+         */
         val saveUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::saveUrl
         val deleteUrlAnimal: (UrlAnimal) -> Unit = CatDogRepository::deleteUrl
         val checkForFavorite: (UrlAnimal) -> Boolean = CatDogRepository::checkIfFavorite
@@ -86,33 +84,22 @@ class CatDogListFragment : Fragment() {
             checkIfFavorite = checkForFavorite
         )
 
-        flow.onEach {
-            viewAdapter.addUrl(it)
-            viewAdapter.notifyItemRangeInserted(viewAdapter.itemCount, 1)
-        }.launchIn(lifecycleScope)
-
         recyclerView = binding.root.catDogList.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }
 
-        // Whenever a change is made the MutableLiveData list, the list inside the view adapter is informed
-//        listViewModel.catDogUrls.observe(viewLifecycleOwner, Observer {
-//            viewAdapter.submitList(it)
-//        })
-        
+        lifecycleScope.launch {
+            listViewModel.getUrlAnimals()
+        }
+
         /**
-         * Checks to see if the list from favs is empty. If so, then display the imageView instead.
+         * Every time an item is sent to the flow, add the item to the view adapter list and notify the adapter.
          */
-//        if ((listViewModel.catDogUrls.value?.isEmpty() ?: false)) {
-//            listViewModel.getUrls()
-//            binding.listScrollView.visibility = View.GONE
-//            binding.favsText.visibility = View.VISIBLE
-//        } else {
-//            recyclerView = binding.root.catDogList.apply {
-//                layoutManager = viewManager
-//                adapter = viewAdapter
-//            }
+        flow.onEach {
+            viewAdapter.addUrl(it)
+            viewAdapter.notifyItemRangeInserted(viewAdapter.itemCount, 1)
+        }.launchIn(lifecycleScope)
 
         /**
          * Adds a listener that activates when the user is at the end of the RecyclerView
@@ -121,9 +108,9 @@ class CatDogListFragment : Fragment() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
+                if (!recyclerView.canScrollVertically(1) && !optionSC.isFav()) {
                     lifecycleScope.launch {
-                        listViewModel.getUrlAnimals(2)
+                        listViewModel.getUrlAnimals()
                     }
                 }
             }
@@ -131,6 +118,9 @@ class CatDogListFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Informs the view model that the fragment is detaching. Useful to set info in the view model to help with configuration changes.
+     */
     override fun onDetach() {
         super.onDetach()
         listViewModel.fragmentDetach()

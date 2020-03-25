@@ -27,13 +27,13 @@ class CatDogRViewHolder(private val binding: CatdogItemBinding) :
         }
     }
 
-    fun bindCat(url: String) {
+    private fun bindCat(url: String) {
         Glide.with(binding.root)
             .load(url)
             .into(binding.catdogImage)
     }
 
-    fun bindDog(url: String) {
+    private fun bindDog(url: String) {
         if (url.contains("gif".toRegex())) {
             Glide.with(binding.root)
                 .asGif()

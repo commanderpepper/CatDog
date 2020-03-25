@@ -124,7 +124,7 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         runBlocking {
             withContext(Dispatchers.IO) {
                 val amount = animalDatabase.animalDao().checkForAnimalUrl(animalUrl)
-                if (amount > 1) {
+                if (amount >= 1) {
                     result.offer(true)
                 }
             }

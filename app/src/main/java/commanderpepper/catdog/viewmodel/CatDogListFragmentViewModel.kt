@@ -15,11 +15,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
-private const val amount = 4
+private const val amount = 2
 
 class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private val urlAnimalChannel: Channel<UrlAnimal> = Channel(Channel.UNLIMITED)
+
+    /**
+     * A list that holds urls. Useful for loading urls upon configuration changes (like a phone rotation).
+     */
     private val urlAnimalList = mutableListOf<UrlAnimal>()
+
+    /**
+     * The first time using this view model the list is not used. When the fragment detaches, this is set to true and the list is used when the fragment is reattached.
+     */
     private var useList = false
 
     private val repository = CatDogRepository

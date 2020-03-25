@@ -18,3 +18,11 @@ fun String.toOption(): Option {
         else -> Option.BOTH
     }
 }
+
+fun Option.isFav(): Boolean {
+    return when (this) {
+        is Option.CATFAV -> true
+        is Option.DOGFAV -> true
+        else -> false
+    }
+}
