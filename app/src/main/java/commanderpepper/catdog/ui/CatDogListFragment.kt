@@ -68,6 +68,19 @@ class CatDogListFragment : Fragment() {
 
         viewManager = LinearLayoutManager(context)
 
+        if (listViewModel.optionSC.isFav()) {
+            lifecycleScope.launch {
+                val hasFavs = listViewModel.checkForFavorites(optionSC)
+                if (hasFavs) {
+                    binding.favsText.visibility = View.GONE
+                    binding.listScrollView.visibility = View.VISIBLE
+                }
+            }
+        } else {
+            binding.favsText.visibility = View.GONE
+            binding.listScrollView.visibility = View.VISIBLE
+        }
+
         /**
          * Functions to pass to the recycler view adapter
          */
@@ -115,6 +128,7 @@ class CatDogListFragment : Fragment() {
                 }
             }
         })
+
         return binding.root
     }
 

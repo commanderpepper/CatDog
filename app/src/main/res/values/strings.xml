@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">CatDog</string>
     <string name="Both">Both?</string>
-    <string name="no_favs_message">Star some cats or dogs</string>
+    <string name="no_favs_message">Favorite some cats or dogs!</string>
 </resources>

@@ -15,10 +15,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_favs_message"
-                android:visibility="gone"
+                android:layout_margin="16dp"
                 android:textSize="18sp"/>
 
         <ScrollView
+                android:visibility="gone"
                 android:id="@+id/list_scroll_view"
                 android:orientation="vertical"
                 android:layout_width="match_parent"

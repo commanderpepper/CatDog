@@ -2,6 +2,7 @@ package commanderpepper.catdog.repo
 
 import commanderpepper.catdog.models.Cat
 import commanderpepper.catdog.models.Dog
+import commanderpepper.catdog.models.Option
 import commanderpepper.catdog.models.UrlAnimal
 import commanderpepper.catdog.retrofit.CatService
 import commanderpepper.catdog.retrofit.DogService
@@ -81,6 +82,14 @@ object CatDogRepository {
         return when (url) {
             is UrlAnimal.UrlCat -> databaseLocalSource.checkForAnimalUrl(url.cat.file)
             is UrlAnimal.UrlDog -> databaseLocalSource.checkForAnimalUrl(url.dog.url)
+        }
+    }
+
+    suspend fun checkForFavorites(option: Option): Boolean {
+        return when (option) {
+            is Option.CATFAV -> databaseLocalSource.checkForCatFavorites()
+            is Option.DOGFAV -> databaseLocalSource.checkForDogFavorites()
+            else -> false
         }
     }
 

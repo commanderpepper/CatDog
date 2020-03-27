@@ -33,5 +33,10 @@ interface AnimalDao {
     @Query("SELECT COUNT(*) from animal WHERE url = :url")
     suspend fun checkForAnimalUrl(url: String): Int
 
+    @Query("SELECT COUNT(*) from animal WHERE animalType = 'CAT'")
+    suspend fun checkForCatFavorites(): Int
+
+    @Query("SELECT COUNT(*) from animal WHERE animalType = 'DOG'")
+    suspend fun checkForDogFavorites(): Int
 }
 

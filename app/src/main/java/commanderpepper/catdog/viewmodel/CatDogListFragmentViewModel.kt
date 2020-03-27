@@ -72,6 +72,10 @@ class CatDogListFragmentViewModel(application: Application) : AndroidViewModel(a
         urlAnimalList += this
     }
 
+    suspend fun checkForFavorites(option: Option) : Boolean{
+        return repository.checkForFavorites(option)
+    }
+
     fun getFlowOfUrlAnimals(): Flow<UrlAnimal> {
         return urlAnimalChannel.consumeAsFlow()
     }

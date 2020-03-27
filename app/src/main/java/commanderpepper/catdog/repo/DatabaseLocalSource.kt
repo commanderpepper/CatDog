@@ -34,6 +34,14 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         animalDatabase.animalDao().deleteAnimal(AnimalUrl(url, "DOG"))
     }
 
+    suspend fun checkForCatFavorites(): Boolean {
+        return animalDatabase.animalDao().checkForCatFavorites() > 0
+    }
+
+    suspend fun checkForDogFavorites(): Boolean {
+        return animalDatabase.animalDao().checkForDogFavorites() > 0
+    }
+
     /**
      * Get list of favorite cats
      */
@@ -66,8 +74,8 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
         }
     }
 
-    suspend fun getAllFavoriteDogUrls(): List<String>{
-        return withContext(Dispatchers.IO){
+    suspend fun getAllFavoriteDogUrls(): List<String> {
+        return withContext(Dispatchers.IO) {
             animalDatabase.animalDao().getDogsUrls()
         }
     }
