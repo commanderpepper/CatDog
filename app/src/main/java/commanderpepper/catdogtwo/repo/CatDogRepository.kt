@@ -20,7 +20,7 @@ object CatDogRepository {
 
     private suspend fun getDogUrl() = dogService.getDog().url
 
-    suspend fun getCat(): String {
+    private suspend fun getCat(): String {
         var catUrl = ""
         while (!catUrl.contains("jpg|png".toRegex())) {
             catUrl = getCatUrl()
@@ -28,7 +28,7 @@ object CatDogRepository {
         return catUrl
     }
 
-    suspend fun getDog(): String {
+    private suspend fun getDog(): String {
         var dogUrl = ""
         while (!dogUrl.contains("gif|jpg|png".toRegex())) {
             dogUrl = getDogUrl()

@@ -3,6 +3,7 @@ package commanderpepper.catdog
 import commanderpepper.catdogtwo.retrofit.DogService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,18 +20,16 @@ class DogServiceTest {
     }
 
     @Test
-    fun getDog() {
-        GlobalScope.launch {
-            val dog = dogService.getDog()
-            assertThat(dog, `is`(IsNull.notNullValue()))
-        }
+    fun getDog() = runBlocking {
+        val dog = dogService.getDog()
+        assertThat(dog, `is`(IsNull.notNullValue()))
     }
 
+
     @Test
-    fun checkDog() {
-        GlobalScope.launch {
-            val dog = dogService.getDog()
-            assertThat(dog.url, CoreMatchers.containsString("random"))
-        }
+    fun checkDog() = runBlocking {
+        val dog = dogService.getDog()
+        assertThat(dog.url, CoreMatchers.containsString("random"))
     }
+
 }

@@ -1,5 +1,6 @@
 package commanderpepper.catdog
 
+import androidx.room.Room
 import commanderpepper.catdogtwo.models.AnimalUrl
 import commanderpepper.catdogtwo.room.AnimalDatabase
 import kotlinx.coroutines.launch
@@ -10,16 +11,19 @@ import org.junit.Before
 import org.junit.Test
 
 class AnimalDatabaseTest {
-    lateinit var database: AnimalDatabase
+    private lateinit var database: AnimalDatabase
 
     @Before
     fun init() {
-        val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
-//        database = Room.inMemoryDatabaseBuilder(
-//            context,
-//            AnimalDatabase::class.java
-//        ).build()
-        database = AnimalDatabase.getInstance(context)
+        val context =
+            androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+
+        database = Room.inMemoryDatabaseBuilder(
+            context,
+            AnimalDatabase::class.java
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 
     @Test
@@ -56,7 +60,6 @@ class AnimalDatabaseTest {
 
         val size = database.animalDao().getUrls().size
         assertThat(size, CoreMatchers.equalTo(0))
-
     }
 
 }

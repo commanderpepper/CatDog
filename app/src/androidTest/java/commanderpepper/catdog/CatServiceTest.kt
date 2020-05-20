@@ -3,6 +3,7 @@ package commanderpepper.catdog
 import commanderpepper.catdogtwo.retrofit.CatService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,19 +20,15 @@ class CatServiceTest {
     }
 
     @Test
-    fun getCat() {
-        GlobalScope.launch {
-            val cat = catService.getCat()
-            assertThat(cat, `is`(IsNull.notNullValue()))
-        }
+    fun getCat() = runBlocking {
+        val cat = catService.getCat()
+        assertThat(cat, `is`(IsNull.notNullValue()))
     }
 
     @Test
-    fun checkCat() {
-        GlobalScope.launch {
-            val cat = catService.getCat()
-            assertThat(cat.file, containsString("/"))
-        }
+    fun checkCat() = runBlocking {
+        val cat = catService.getCat()
+        assertThat(cat.file, containsString("/"))
     }
 
 }
