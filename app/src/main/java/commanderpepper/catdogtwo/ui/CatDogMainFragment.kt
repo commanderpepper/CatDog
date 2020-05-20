@@ -1,5 +1,6 @@
 package commanderpepper.catdogtwo.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide
 import commanderpepper.catdogtwo.Choice
 import commanderpepper.catdogtwo.R
 import commanderpepper.catdogtwo.databinding.MainFragmentBinding
+import commanderpepper.catdogtwo.models.Option
 import commanderpepper.catdogtwo.viewmodel.CatDogMainViewModel
 import kotlinx.coroutines.*
 
@@ -76,18 +78,16 @@ class CatDogMainFragment : Fragment() {
             }
         }
 
-        val intent = Intent(context, ListActivity::class.java)
-
         catButton.setOnClickListener {
-            startListActivity(intent, Choice.CAT.toString())
+            startListActivity(requireContext(), Choice.CAT)
         }
 
         dogButton.setOnClickListener {
-            startListActivity(intent, Choice.DOG.toString())
+            startListActivity(requireContext(), Choice.DOG)
         }
 
         bothButton.setOnClickListener {
-            startListActivity(intent, Choice.BOTH.toString())
+            startListActivity(requireContext(), Choice.BOTH)
         }
 
         return binding.mainLayout
@@ -104,11 +104,12 @@ class CatDogMainFragment : Fragment() {
             .into(imageView)
     }
 
-    private fun startListActivity(intent: Intent, option: String) {
-        val bundle = Bundle().apply {
-            this.putString("Option", option)
+    private fun startListActivity(context: Context, choice: Choice) {
+        val intent = Intent(context, ListActivity::class.java).apply {
+            putExtras(Bundle().apply {
+                this.putString("Option", choice.toString())
+            })
         }
-        intent.putExtras(bundle)
         startActivity(intent)
     }
 

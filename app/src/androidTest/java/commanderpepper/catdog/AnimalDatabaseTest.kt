@@ -1,7 +1,7 @@
 package commanderpepper.catdog
 
-import commanderpepper.catdog.models.AnimalUrl
-import commanderpepper.catdog.room.AnimalDatabase
+import commanderpepper.catdogtwo.models.AnimalUrl
+import commanderpepper.catdogtwo.room.AnimalDatabase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers

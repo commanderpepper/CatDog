@@ -114,6 +114,8 @@ class CatDogListFragment : Fragment() {
             viewAdapter.notifyItemRangeInserted(viewAdapter.itemCount, 1)
         }.launchIn(lifecycleScope)
 
+
+
         /**
          * Adds a listener that activates when the user is at the end of the RecyclerView
          * Allows for endless scrolling when choosing random animals

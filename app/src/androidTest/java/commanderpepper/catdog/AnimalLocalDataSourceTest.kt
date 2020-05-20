@@ -1,6 +1,6 @@
 package commanderpepper.catdog
 
-import commanderpepper.catdog.repo.DatabaseLocalSource
+import commanderpepper.catdogtwo.repo.DatabaseLocalSource
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert

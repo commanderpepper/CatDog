@@ -1,6 +1,6 @@
 package commanderpepper.catdog
 
-import commanderpepper.catdog.repo.CatDogRepository
+import commanderpepper.catdogtwo.repo.CatDogRepository
 import org.junit.Before
 
 class CatDogRepositoryTest {

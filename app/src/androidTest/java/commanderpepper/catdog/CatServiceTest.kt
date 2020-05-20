@@ -1,6 +1,6 @@
 package commanderpepper.catdog
 
-import commanderpepper.catdog.retrofit.CatService
+import commanderpepper.catdogtwo.retrofit.CatService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.hamcrest.CoreMatchers.`is`
