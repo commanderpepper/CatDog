@@ -1,35 +1,33 @@
-apply(plugin: "com.android.application")
-
-apply(plugin: "kotlin-android")
-
-apply(plugin: "kotlin-android-extensions")
-
-apply(plugin: "kotlin-kapt")
-
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("kotlin-android-extensions")
+}
 android {
     compileSdkVersion(29)
     defaultConfig {
-        applicationId("commanderpepper.catdogtwo")
+        applicationId = "commanderpepper.catdogtwo"
         minSdkVersion(19)
         targetSdkVersion(29)
-        versionCode(1)
-        versionName("1.0")
-        testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        release {
-            minifyEnabled = false
-            proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
+        named("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     dataBinding {
-        enabled = true
+        isEnabled = true
     }
 }
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
@@ -38,9 +36,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 
     //Web related services
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:retrofit:2.6.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-moshi:2.6.0")
 
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
@@ -63,10 +61,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
     //Room
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:2.2.4")
+    implementation("androidx.room:room-ktx:2.2.4")
+    annotationProcessor("androidx.room:room-compiler:2.2.4")
+    kapt("androidx.room:room-compiler:2.2.4")
 
     //Material Design
     implementation("com.google.android.material:material:1.1.0")
