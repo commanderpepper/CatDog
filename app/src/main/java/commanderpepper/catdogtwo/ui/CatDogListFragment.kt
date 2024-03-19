@@ -21,7 +21,6 @@ import commanderpepper.catdogtwo.models.toOption
 import commanderpepper.catdogtwo.repo.CatDogRepository
 import commanderpepper.catdogtwo.ui.recyclerview.CatDogRAdapter
 import commanderpepper.catdogtwo.viewmodel.CatDogListFragmentViewModel
-import kotlinx.android.synthetic.main.catdoglist_fragment.view.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -97,7 +96,7 @@ class CatDogListFragment : Fragment() {
             checkIfFavorite = checkForFavorite
         )
 
-        recyclerView = binding.root.catDogList.apply {
+        recyclerView = binding.catDogList.apply {
             layoutManager = viewManager
             adapter = viewAdapter
         }

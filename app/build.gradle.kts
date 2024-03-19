@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
-    id("kotlin-android-extensions")
 }
 android {
     compileSdkVersion(34)
@@ -22,6 +21,13 @@ android {
     }
     dataBinding {
         isEnabled = true
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     namespace = "commanderpepper.catdogtwo"
 }
@@ -62,10 +68,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
     //Room
-    implementation("androidx.room:room-runtime:2.2.4")
-    implementation("androidx.room:room-ktx:2.2.4")
-    annotationProcessor("androidx.room:room-compiler:2.2.4")
-    kapt("androidx.room:room-compiler:2.2.4")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
     //Material Design
     implementation("com.google.android.material:material:1.1.0")

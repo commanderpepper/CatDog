@@ -128,12 +128,12 @@ class DatabaseLocalSource(val animalDatabase: AnimalDatabase) {
 
     fun checkForAnimalUrl(animalUrl: String): Boolean {
         val result = ConflatedBroadcastChannel<Boolean>()
-        result.offer(false)
+        result.trySend(false)
         runBlocking {
             withContext(Dispatchers.IO) {
                 val amount = animalDatabase.animalDao().checkForAnimalUrl(animalUrl)
                 if (amount >= 1) {
-                    result.offer(true)
+                    result.trySend(true)
                 }
             }
         }

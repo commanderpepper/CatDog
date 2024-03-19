@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * Goes to the favorite section when clicked
      */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val intent = Intent(this, ListActivity::class.java)
-        when (item!!.itemId) {
+        when (item.itemId) {
             R.id.cat_nav -> {
                 intent.putExtras(Bundle().apply { this.putString("Option", Choice.CATFAV.toString()) })
                 startActivity(intent)
@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtras(Bundle().apply { this.putString("Option", Choice.DOGFAV.toString()) })
                 startActivity(intent)
             }
+            else -> {  }
         }
 
         return super.onOptionsItemSelected(item)
