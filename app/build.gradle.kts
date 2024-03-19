@@ -5,11 +5,11 @@ plugins {
     id("kotlin-android-extensions")
 }
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(34)
     defaultConfig {
         applicationId = "commanderpepper.catdogtwo"
-        minSdkVersion(19)
-        targetSdkVersion(29)
+        minSdkVersion(23)
+        targetSdkVersion(34)
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -23,6 +23,7 @@ android {
     dataBinding {
         isEnabled = true
     }
+    namespace = "commanderpepper.catdogtwo"
 }
 
 dependencies {
