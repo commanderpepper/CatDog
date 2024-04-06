@@ -24,10 +24,14 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
     namespace = "commanderpepper.catdogtwo"
 }
@@ -75,4 +79,16 @@ dependencies {
 
     //Material Design
     implementation("com.google.android.material:material:1.1.0")
+
+    //Image Loading Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    //Compose
+    val composeBom = platform("androidx.compose:compose-bom:2024.03.00")
+    implementation(composeBom)
+    //Material Design 3
+    implementation("androidx.compose.material3:material3")
+    //Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 }
