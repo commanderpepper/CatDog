@@ -1,6 +1,7 @@
 package commanderpepper.catdogtwo.ui.compose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -13,8 +14,8 @@ import commanderpepper.catdogtwo.models.Cat
 import commanderpepper.catdogtwo.models.Dog
 
 @Composable
-fun CatDogAnimal(cat: Cat, isFavorite: Boolean) {
-    Box {
+fun CatDogAnimal(cat: Cat, isFavorite: Boolean, onClick: (Cat) -> Unit) {
+    Box(modifier = Modifier.clickable { onClick(cat) }) {
         AsyncImage(model = cat.file, contentDescription = "A cat")
         Image(
             modifier = Modifier.align(alignment = Alignment.TopStart),
@@ -26,7 +27,7 @@ fun CatDogAnimal(cat: Cat, isFavorite: Boolean) {
 }
 
 @Composable
-fun CatDogAnimal(dog: Dog, isFavorite: Boolean) {
+fun CatDogAnimal(dog: Dog, isFavorite: Boolean, onClick: (Dog) -> Unit) {
     Box {
         AsyncImage(model = dog.url, contentDescription = "A dog")
         Image(
@@ -42,9 +43,9 @@ fun CatDogAnimal(dog: Dog, isFavorite: Boolean) {
 @Composable
 fun CatDogAnimalPreviews(){
     Column {
-        CatDogAnimal(cat = Cat("https://i.imgur.com/94fhCnt.png"), isFavorite = false)
-        CatDogAnimal(cat = Cat("https://i.imgur.com/94fhCnt.png"), isFavorite = true)
-        CatDogAnimal(cat = Cat(""), isFavorite = true)
+        CatDogAnimal(cat = Cat("https://i.imgur.com/94fhCnt.png"), isFavorite = false){ }
+        CatDogAnimal(cat = Cat("https://i.imgur.com/94fhCnt.png"), isFavorite = true){ }
+        CatDogAnimal(cat = Cat(""), isFavorite = true){ }
 
     }
 }
